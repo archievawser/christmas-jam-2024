@@ -1,6 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bfvqgu4cskm6t"]
+[gd_scene load_steps=9 format=3 uid="uid://bfvqgu4cskm6t"]
 
 [ext_resource type="Texture2D" uid="uid://c1epjx08rgupm" path="res://player/santa.png" id="1_5e8wf"]
+[ext_resource type="Texture2D" uid="uid://dmfjbmacaaiv2" path="res://player/santas-hand.png" id="2_k6sdo"]
+[ext_resource type="Texture2D" uid="uid://8fmdbqlxjhah" path="res://player/santa-torso.png" id="3_xscpu"]
+[ext_resource type="Texture2D" uid="uid://bq5xlntqixy1c" path="res://player/santa-head.png" id="4_i7jo1"]
+[ext_resource type="Texture2D" uid="uid://cx2xb0ycq7kml" path="res://player/santa-leg-left.png" id="5_0kldk"]
+[ext_resource type="Texture2D" uid="uid://2kf4ieetnvan" path="res://player/santa-leg-right.png" id="6_ybx8p"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_jlx7r"]
 size = Vector2(86, 154)
@@ -10,16 +15,16 @@ size = Vector2(1152, 20)
 
 [node name="Node2D" type="Node2D"]
 
-[node name="Character" type="Node2D" parent="."]
+[node name="CharacterOld" type="Node2D" parent="."]
 position = Vector2(156, 100)
 
-[node name="RigidBody2D" type="RigidBody2D" parent="Character"]
+[node name="RigidBody2D" type="RigidBody2D" parent="CharacterOld"]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Character/RigidBody2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterOld/RigidBody2D"]
 position = Vector2(-2, 0)
 shape = SubResource("RectangleShape2D_jlx7r")
 
-[node name="Sprite" type="Sprite2D" parent="Character/RigidBody2D"]
+[node name="Sprite" type="Sprite2D" parent="CharacterOld/RigidBody2D"]
 texture_filter = 1
 position = Vector2(-7, 0)
 scale = Vector2(4.78125, 4.8125)
@@ -36,3 +41,41 @@ freeze = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Ground/RigidBody2D"]
 shape = SubResource("RectangleShape2D_0eaox")
+
+[node name="character" type="Node2D" parent="."]
+texture_filter = 1
+position = Vector2(579, 219)
+
+[node name="arm-left" type="Sprite2D" parent="character"]
+z_index = -1
+position = Vector2(-43.25, -3.9643)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("2_k6sdo")
+
+[node name="arm-right" type="Sprite2D" parent="character"]
+z_index = 1
+position = Vector2(59.75, -0.964302)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("2_k6sdo")
+
+[node name="torso" type="Sprite2D" parent="character"]
+position = Vector2(8.75, -22.9643)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("3_xscpu")
+
+[node name="head" type="Sprite2D" parent="character"]
+position = Vector2(23.75, -89.9643)
+scale = Vector2(7.89286, 7.89286)
+texture = ExtResource("4_i7jo1")
+
+[node name="leg-left" type="Sprite2D" parent="character"]
+z_index = -1
+position = Vector2(-20.5, 35.5357)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("5_0kldk")
+
+[node name="leg-right" type="Sprite2D" parent="character"]
+z_index = -1
+position = Vector2(28.5, 30.5357)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("6_ybx8p")
