@@ -1,0 +1,38 @@
+[gd_scene load_steps=4 format=3 uid="uid://bfvqgu4cskm6t"]
+
+[ext_resource type="Texture2D" uid="uid://c1epjx08rgupm" path="res://player/santa.png" id="1_5e8wf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_jlx7r"]
+size = Vector2(86, 154)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0eaox"]
+size = Vector2(1152, 20)
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Character" type="Node2D" parent="."]
+position = Vector2(156, 100)
+
+[node name="RigidBody2D" type="RigidBody2D" parent="Character"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Character/RigidBody2D"]
+position = Vector2(-2, 0)
+shape = SubResource("RectangleShape2D_jlx7r")
+
+[node name="Sprite" type="Sprite2D" parent="Character/RigidBody2D"]
+texture_filter = 1
+position = Vector2(-7, 0)
+scale = Vector2(4.78125, 4.8125)
+texture = ExtResource("1_5e8wf")
+
+[node name="Ground" type="Node2D" parent="."]
+position = Vector2(570, 641)
+
+[node name="Sprite2D" type="Sprite2D" parent="Ground"]
+
+[node name="RigidBody2D" type="RigidBody2D" parent="Ground"]
+position = Vector2(1, 0)
+freeze = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground/RigidBody2D"]
+shape = SubResource("RectangleShape2D_0eaox")
