@@ -1,3 +1,4 @@
+class_name CharacterMovement
 extends RigidBody2D
 
 
@@ -43,7 +44,7 @@ func _process(delta: float) -> void:
 	_update_head_rotation();
 
 	if Input.is_action_just_pressed("jump"):
-		velocity += Vector2.UP * jumpForce;
+		apply_central_impulse(Vector2.UP * jumpForce);
 
 	
 func _setup_limb_lookup() -> void:
@@ -79,7 +80,7 @@ func _get_movement_vector() -> Vector2:
 func _apply_character_movement() -> void:
 	var move = _get_movement_vector();
 	
-	self.move_and_collide(move);
+	apply_central_impulse(move);
 
 
 func _face_character_right() -> void:
@@ -142,10 +143,10 @@ func _update_camera_position() -> void:
 
 
 func _apply_gravity() -> void:
-	velocity += Vector2.DOWN * gravity * frameDelta;
+	pass
 
-	var collision = self.move_and_collide(velocity * frameDelta);
-	self.move_and_collide(_get_movement_vector());
+	#var collision = self.apply_impulse((velocity * frameDelta);
+	#self.move_and_collide(_get_movement_vector());
 
-	if collision:
-		velocity = Vector2.DOWN * 2;
+	#if collision:
+	#	velocity = Vector2.DOWN * 2;
