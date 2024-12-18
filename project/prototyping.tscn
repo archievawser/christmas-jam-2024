@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://bfvqgu4cskm6t"]
+[gd_scene load_steps=16 format=3 uid="uid://bfvqgu4cskm6t"]
 
 [ext_resource type="Script" path="res://prototyping.gd" id="1_cfq31"]
 [ext_resource type="Texture2D" uid="uid://dmfjbmacaaiv2" path="res://player/santas-hand.png" id="2_k6sdo"]
@@ -6,7 +6,12 @@
 [ext_resource type="Texture2D" uid="uid://bq5xlntqixy1c" path="res://player/santa-head.png" id="4_i7jo1"]
 [ext_resource type="Texture2D" uid="uid://biiw2oayiulx5" path="res://player/santa-foot.png" id="5_ghto1"]
 [ext_resource type="Script" path="res://player/scripts/player-character.gd" id="5_i6vso"]
+[ext_resource type="Texture2D" uid="uid://dkces187k3qsv" path="res://snowman/snowman-head.png" id="7_avqii"]
+[ext_resource type="Script" path="res://player/scripts/npc.gd" id="7_p6qj8"]
+[ext_resource type="Texture2D" uid="uid://57rby2h6t245" path="res://snowman/snowman-hand.png" id="8_7u3ln"]
 [ext_resource type="Texture2D" uid="uid://bej1c1p2evaqy" path="res://player/cane.png" id="8_jdody"]
+[ext_resource type="Texture2D" uid="uid://oy3o8ohdntdh" path="res://snowman/snowman-leg.png" id="11_r4whv"]
+[ext_resource type="Texture2D" uid="uid://dyaqj3govc3ow" path="res://snowman/snowman-torso.png" id="11_vm651"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_57qbr"]
 size = Vector2(102, 88.5)
@@ -72,6 +77,8 @@ cameraSpeed = 10.0
 camera = NodePath("../camera")
 torso = NodePath("torso")
 root = NodePath("..")
+legLength = 55.0
+legDamper = 40.0
 
 [node name="torso" type="Sprite2D" parent="character/body"]
 position = Vector2(-3, 32.9997)
@@ -101,6 +108,643 @@ shape = SubResource("RectangleShape2D_57qbr")
 position = Vector2(-6, -34)
 zoom = Vector2(0.805, 0.805)
 
+[node name="npc" type="Node2D" parent="."]
+texture_filter = 1
+position = Vector2(28, -222)
+
+[node name="head" type="Sprite2D" parent="npc"]
+z_index = 1
+position = Vector2(-4, -13)
+scale = Vector2(7.89286, 7.89286)
+texture = ExtResource("7_avqii")
+centered = false
+offset = Vector2(-4.83, -7.665)
+
+[node name="arm-left" type="Sprite2D" parent="npc"]
+z_index = -1
+position = Vector2(-53.25, 51.0357)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="arm-right" type="Sprite2D" parent="npc"]
+z_index = 1
+position = Vector2(42.39, 53.495)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="leg-left" type="Sprite2D" parent="npc"]
+z_index = -1
+position = Vector2(-30, 123.5)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.02)
+
+[node name="leg-right" type="Sprite2D" parent="npc"]
+z_index = -1
+position = Vector2(16, 124)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.06)
+
+[node name="body" type="RigidBody2D" parent="npc" node_paths=PackedStringArray("camera", "torso", "root")]
+texture_filter = 1
+position = Vector2(6, 2)
+mass = 8.985
+can_sleep = false
+script = ExtResource("7_p6qj8")
+moveSpeed = 5000.0
+jumpForce = 7000.0
+friction = 2.01
+cameraSpeed = 10.0
+camera = NodePath("../camera")
+torso = NodePath("torso")
+root = NodePath("..")
+legLength = 50.0
+legDamper = 50.0
+
+[node name="torso" type="Sprite2D" parent="npc/body"]
+position = Vector2(-3, 43)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_vm651")
+
+[node name="head-socket" type="Node2D" parent="npc/body/torso"]
+position = Vector2(-0.96, -6.475)
+
+[node name="leg-left-socket" type="Node2D" parent="npc/body/torso"]
+position = Vector2(-3.2, 4.00004)
+
+[node name="leg-right-socket" type="Node2D" parent="npc/body/torso"]
+position = Vector2(3.2, 4)
+
+[node name="arm-left-socket" type="Node2D" parent="npc/body/torso"]
+position = Vector2(-6.59, 2.76)
+
+[node name="arm-right-socket" type="Node2D" parent="npc/body/torso"]
+position = Vector2(6.035, 2.76)
+
+[node name="leg-left2" type="Sprite2D" parent="npc/body/torso"]
+visible = false
+z_index = -1
+position = Vector2(-0.266667, 9.33337)
+scale = Vector2(0.779861, 0.779861)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.47)
+
+[node name="hitbox" type="CollisionShape2D" parent="npc/body"]
+position = Vector2(-5, 43)
+scale = Vector2(0.972612, 1.07096)
+shape = SubResource("RectangleShape2D_57qbr")
+
+[node name="camera" type="Camera2D" parent="npc"]
+position = Vector2(-6, -34)
+zoom = Vector2(0.805, 0.805)
+
+[node name="npc2" type="Node2D" parent="."]
+texture_filter = 1
+position = Vector2(201, -227)
+
+[node name="head" type="Sprite2D" parent="npc2"]
+z_index = 1
+position = Vector2(-4, -13)
+scale = Vector2(7.89286, 7.89286)
+texture = ExtResource("7_avqii")
+centered = false
+offset = Vector2(-4.83, -7.665)
+
+[node name="arm-left" type="Sprite2D" parent="npc2"]
+z_index = -1
+position = Vector2(-53.25, 51.0357)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="arm-right" type="Sprite2D" parent="npc2"]
+z_index = 1
+position = Vector2(42.39, 53.495)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="leg-left" type="Sprite2D" parent="npc2"]
+z_index = -1
+position = Vector2(-30, 123.5)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.02)
+
+[node name="leg-right" type="Sprite2D" parent="npc2"]
+z_index = -1
+position = Vector2(16, 124)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.06)
+
+[node name="body" type="RigidBody2D" parent="npc2" node_paths=PackedStringArray("camera", "torso", "root")]
+texture_filter = 1
+position = Vector2(6, 2)
+mass = 8.985
+can_sleep = false
+script = ExtResource("7_p6qj8")
+moveSpeed = 5000.0
+jumpForce = 7000.0
+friction = 2.01
+cameraSpeed = 10.0
+camera = NodePath("../camera")
+torso = NodePath("torso")
+root = NodePath("..")
+legLength = 50.0
+legDamper = 50.0
+
+[node name="torso" type="Sprite2D" parent="npc2/body"]
+position = Vector2(-3, 43)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_vm651")
+
+[node name="head-socket" type="Node2D" parent="npc2/body/torso"]
+position = Vector2(-0.96, -6.475)
+
+[node name="leg-left-socket" type="Node2D" parent="npc2/body/torso"]
+position = Vector2(-3.2, 4.00004)
+
+[node name="leg-right-socket" type="Node2D" parent="npc2/body/torso"]
+position = Vector2(3.2, 4)
+
+[node name="arm-left-socket" type="Node2D" parent="npc2/body/torso"]
+position = Vector2(-6.59, 2.76)
+
+[node name="arm-right-socket" type="Node2D" parent="npc2/body/torso"]
+position = Vector2(6.035, 2.76)
+
+[node name="leg-left2" type="Sprite2D" parent="npc2/body/torso"]
+visible = false
+z_index = -1
+position = Vector2(-0.266667, 9.33337)
+scale = Vector2(0.779861, 0.779861)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.47)
+
+[node name="hitbox" type="CollisionShape2D" parent="npc2/body"]
+position = Vector2(-5, 43)
+scale = Vector2(0.972612, 1.07096)
+shape = SubResource("RectangleShape2D_57qbr")
+
+[node name="camera" type="Camera2D" parent="npc2"]
+position = Vector2(-6, -34)
+zoom = Vector2(0.805, 0.805)
+
+[node name="npc3" type="Node2D" parent="."]
+texture_filter = 1
+position = Vector2(383, -238)
+
+[node name="head" type="Sprite2D" parent="npc3"]
+z_index = 1
+position = Vector2(-4, -13)
+scale = Vector2(7.89286, 7.89286)
+texture = ExtResource("7_avqii")
+centered = false
+offset = Vector2(-4.83, -7.665)
+
+[node name="arm-left" type="Sprite2D" parent="npc3"]
+z_index = -1
+position = Vector2(-53.25, 51.0357)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="arm-right" type="Sprite2D" parent="npc3"]
+z_index = 1
+position = Vector2(42.39, 53.495)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="leg-left" type="Sprite2D" parent="npc3"]
+z_index = -1
+position = Vector2(-30, 123.5)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.02)
+
+[node name="leg-right" type="Sprite2D" parent="npc3"]
+z_index = -1
+position = Vector2(16, 124)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.06)
+
+[node name="body" type="RigidBody2D" parent="npc3" node_paths=PackedStringArray("camera", "torso", "root")]
+texture_filter = 1
+position = Vector2(6, 2)
+mass = 8.985
+can_sleep = false
+script = ExtResource("7_p6qj8")
+moveSpeed = 5000.0
+jumpForce = 7000.0
+friction = 2.01
+cameraSpeed = 10.0
+camera = NodePath("../camera")
+torso = NodePath("torso")
+root = NodePath("..")
+legLength = 50.0
+legDamper = 50.0
+
+[node name="torso" type="Sprite2D" parent="npc3/body"]
+position = Vector2(-3, 43)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_vm651")
+
+[node name="head-socket" type="Node2D" parent="npc3/body/torso"]
+position = Vector2(-0.96, -6.475)
+
+[node name="leg-left-socket" type="Node2D" parent="npc3/body/torso"]
+position = Vector2(-3.2, 4.00004)
+
+[node name="leg-right-socket" type="Node2D" parent="npc3/body/torso"]
+position = Vector2(3.2, 4)
+
+[node name="arm-left-socket" type="Node2D" parent="npc3/body/torso"]
+position = Vector2(-6.59, 2.76)
+
+[node name="arm-right-socket" type="Node2D" parent="npc3/body/torso"]
+position = Vector2(6.035, 2.76)
+
+[node name="leg-left2" type="Sprite2D" parent="npc3/body/torso"]
+visible = false
+z_index = -1
+position = Vector2(-0.266667, 9.33337)
+scale = Vector2(0.779861, 0.779861)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.47)
+
+[node name="hitbox" type="CollisionShape2D" parent="npc3/body"]
+position = Vector2(-5, 43)
+scale = Vector2(0.972612, 1.07096)
+shape = SubResource("RectangleShape2D_57qbr")
+
+[node name="camera" type="Camera2D" parent="npc3"]
+position = Vector2(-6, -34)
+zoom = Vector2(0.805, 0.805)
+
+[node name="npc4" type="Node2D" parent="."]
+texture_filter = 1
+position = Vector2(575, -242)
+
+[node name="head" type="Sprite2D" parent="npc4"]
+z_index = 1
+position = Vector2(-4, -13)
+scale = Vector2(7.89286, 7.89286)
+texture = ExtResource("7_avqii")
+centered = false
+offset = Vector2(-4.83, -7.665)
+
+[node name="arm-left" type="Sprite2D" parent="npc4"]
+z_index = -1
+position = Vector2(-53.25, 51.0357)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="arm-right" type="Sprite2D" parent="npc4"]
+z_index = 1
+position = Vector2(42.39, 53.495)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="leg-left" type="Sprite2D" parent="npc4"]
+z_index = -1
+position = Vector2(-30, 123.5)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.02)
+
+[node name="leg-right" type="Sprite2D" parent="npc4"]
+z_index = -1
+position = Vector2(16, 124)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.06)
+
+[node name="body" type="RigidBody2D" parent="npc4" node_paths=PackedStringArray("camera", "torso", "root")]
+texture_filter = 1
+position = Vector2(6, 2)
+mass = 8.985
+can_sleep = false
+script = ExtResource("7_p6qj8")
+moveSpeed = 5000.0
+jumpForce = 7000.0
+friction = 2.01
+cameraSpeed = 10.0
+camera = NodePath("../camera")
+torso = NodePath("torso")
+root = NodePath("..")
+legLength = 50.0
+legDamper = 50.0
+
+[node name="torso" type="Sprite2D" parent="npc4/body"]
+position = Vector2(-3, 43)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_vm651")
+
+[node name="head-socket" type="Node2D" parent="npc4/body/torso"]
+position = Vector2(-0.96, -6.475)
+
+[node name="leg-left-socket" type="Node2D" parent="npc4/body/torso"]
+position = Vector2(-3.2, 4.00004)
+
+[node name="leg-right-socket" type="Node2D" parent="npc4/body/torso"]
+position = Vector2(3.2, 4)
+
+[node name="arm-left-socket" type="Node2D" parent="npc4/body/torso"]
+position = Vector2(-6.59, 2.76)
+
+[node name="arm-right-socket" type="Node2D" parent="npc4/body/torso"]
+position = Vector2(6.035, 2.76)
+
+[node name="leg-left2" type="Sprite2D" parent="npc4/body/torso"]
+visible = false
+z_index = -1
+position = Vector2(-0.266667, 9.33337)
+scale = Vector2(0.779861, 0.779861)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.47)
+
+[node name="hitbox" type="CollisionShape2D" parent="npc4/body"]
+position = Vector2(-5, 43)
+scale = Vector2(0.972612, 1.07096)
+shape = SubResource("RectangleShape2D_57qbr")
+
+[node name="camera" type="Camera2D" parent="npc4"]
+position = Vector2(-6, -34)
+zoom = Vector2(0.805, 0.805)
+
+[node name="npc5" type="Node2D" parent="."]
+texture_filter = 1
+position = Vector2(721, -238)
+
+[node name="head" type="Sprite2D" parent="npc5"]
+z_index = 1
+position = Vector2(-4, -13)
+scale = Vector2(7.89286, 7.89286)
+texture = ExtResource("7_avqii")
+centered = false
+offset = Vector2(-4.83, -7.665)
+
+[node name="arm-left" type="Sprite2D" parent="npc5"]
+z_index = -1
+position = Vector2(-53.25, 51.0357)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="arm-right" type="Sprite2D" parent="npc5"]
+z_index = 1
+position = Vector2(42.39, 53.495)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="leg-left" type="Sprite2D" parent="npc5"]
+z_index = -1
+position = Vector2(-30, 123.5)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.02)
+
+[node name="leg-right" type="Sprite2D" parent="npc5"]
+z_index = -1
+position = Vector2(16, 124)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.06)
+
+[node name="body" type="RigidBody2D" parent="npc5" node_paths=PackedStringArray("camera", "torso", "root")]
+texture_filter = 1
+position = Vector2(6, 2)
+mass = 8.985
+can_sleep = false
+script = ExtResource("7_p6qj8")
+moveSpeed = 5000.0
+jumpForce = 7000.0
+friction = 2.01
+cameraSpeed = 10.0
+camera = NodePath("../camera")
+torso = NodePath("torso")
+root = NodePath("..")
+legLength = 50.0
+legDamper = 50.0
+
+[node name="torso" type="Sprite2D" parent="npc5/body"]
+position = Vector2(-3, 43)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_vm651")
+
+[node name="head-socket" type="Node2D" parent="npc5/body/torso"]
+position = Vector2(-0.96, -6.475)
+
+[node name="leg-left-socket" type="Node2D" parent="npc5/body/torso"]
+position = Vector2(-3.2, 4.00004)
+
+[node name="leg-right-socket" type="Node2D" parent="npc5/body/torso"]
+position = Vector2(3.2, 4)
+
+[node name="arm-left-socket" type="Node2D" parent="npc5/body/torso"]
+position = Vector2(-6.59, 2.76)
+
+[node name="arm-right-socket" type="Node2D" parent="npc5/body/torso"]
+position = Vector2(6.035, 2.76)
+
+[node name="leg-left2" type="Sprite2D" parent="npc5/body/torso"]
+visible = false
+z_index = -1
+position = Vector2(-0.266667, 9.33337)
+scale = Vector2(0.779861, 0.779861)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.47)
+
+[node name="hitbox" type="CollisionShape2D" parent="npc5/body"]
+position = Vector2(-5, 43)
+scale = Vector2(0.972612, 1.07096)
+shape = SubResource("RectangleShape2D_57qbr")
+
+[node name="camera" type="Camera2D" parent="npc5"]
+position = Vector2(-6, -34)
+zoom = Vector2(0.805, 0.805)
+
+[node name="npc6" type="Node2D" parent="."]
+texture_filter = 1
+position = Vector2(915, -234)
+
+[node name="head" type="Sprite2D" parent="npc6"]
+z_index = 1
+position = Vector2(-4, -13)
+scale = Vector2(7.89286, 7.89286)
+texture = ExtResource("7_avqii")
+centered = false
+offset = Vector2(-4.83, -7.665)
+
+[node name="arm-left" type="Sprite2D" parent="npc6"]
+z_index = -1
+position = Vector2(-53.25, 51.0357)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="arm-right" type="Sprite2D" parent="npc6"]
+z_index = 1
+position = Vector2(42.39, 53.495)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="leg-left" type="Sprite2D" parent="npc6"]
+z_index = -1
+position = Vector2(-30, 123.5)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.02)
+
+[node name="leg-right" type="Sprite2D" parent="npc6"]
+z_index = -1
+position = Vector2(16, 124)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.06)
+
+[node name="body" type="RigidBody2D" parent="npc6" node_paths=PackedStringArray("camera", "torso", "root")]
+texture_filter = 1
+position = Vector2(6, 2)
+mass = 8.985
+can_sleep = false
+script = ExtResource("7_p6qj8")
+moveSpeed = 5000.0
+jumpForce = 7000.0
+friction = 2.01
+cameraSpeed = 10.0
+camera = NodePath("../camera")
+torso = NodePath("torso")
+root = NodePath("..")
+legLength = 50.0
+legDamper = 50.0
+
+[node name="torso" type="Sprite2D" parent="npc6/body"]
+position = Vector2(-3, 43)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_vm651")
+
+[node name="head-socket" type="Node2D" parent="npc6/body/torso"]
+position = Vector2(-0.96, -6.475)
+
+[node name="leg-left-socket" type="Node2D" parent="npc6/body/torso"]
+position = Vector2(-3.2, 4.00004)
+
+[node name="leg-right-socket" type="Node2D" parent="npc6/body/torso"]
+position = Vector2(3.2, 4)
+
+[node name="arm-left-socket" type="Node2D" parent="npc6/body/torso"]
+position = Vector2(-6.59, 2.76)
+
+[node name="arm-right-socket" type="Node2D" parent="npc6/body/torso"]
+position = Vector2(6.035, 2.76)
+
+[node name="leg-left2" type="Sprite2D" parent="npc6/body/torso"]
+visible = false
+z_index = -1
+position = Vector2(-0.266667, 9.33337)
+scale = Vector2(0.779861, 0.779861)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.47)
+
+[node name="hitbox" type="CollisionShape2D" parent="npc6/body"]
+position = Vector2(-5, 43)
+scale = Vector2(0.972612, 1.07096)
+shape = SubResource("RectangleShape2D_57qbr")
+
+[node name="camera" type="Camera2D" parent="npc6"]
+position = Vector2(-6, -34)
+zoom = Vector2(0.805, 0.805)
+
+[node name="npc7" type="Node2D" parent="."]
+texture_filter = 1
+position = Vector2(1104, -225)
+
+[node name="head" type="Sprite2D" parent="npc7"]
+z_index = 1
+position = Vector2(-4, -13)
+scale = Vector2(7.89286, 7.89286)
+texture = ExtResource("7_avqii")
+centered = false
+offset = Vector2(-4.83, -7.665)
+
+[node name="arm-left" type="Sprite2D" parent="npc7"]
+z_index = -1
+position = Vector2(-53.25, 51.0357)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="arm-right" type="Sprite2D" parent="npc7"]
+z_index = 1
+position = Vector2(42.39, 53.495)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("8_7u3ln")
+
+[node name="leg-left" type="Sprite2D" parent="npc7"]
+z_index = -1
+position = Vector2(-30, 123.5)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.02)
+
+[node name="leg-right" type="Sprite2D" parent="npc7"]
+z_index = -1
+position = Vector2(16, 124)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.06)
+
+[node name="body" type="RigidBody2D" parent="npc7" node_paths=PackedStringArray("camera", "torso", "root")]
+texture_filter = 1
+position = Vector2(6, 2)
+mass = 8.985
+can_sleep = false
+script = ExtResource("7_p6qj8")
+moveSpeed = 5000.0
+jumpForce = 7000.0
+friction = 2.01
+cameraSpeed = 10.0
+camera = NodePath("../camera")
+torso = NodePath("torso")
+root = NodePath("..")
+legLength = 50.0
+legDamper = 50.0
+
+[node name="torso" type="Sprite2D" parent="npc7/body"]
+position = Vector2(-3, 43)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("11_vm651")
+
+[node name="head-socket" type="Node2D" parent="npc7/body/torso"]
+position = Vector2(-0.96, -6.475)
+
+[node name="leg-left-socket" type="Node2D" parent="npc7/body/torso"]
+position = Vector2(-3.2, 4.00004)
+
+[node name="leg-right-socket" type="Node2D" parent="npc7/body/torso"]
+position = Vector2(3.2, 4)
+
+[node name="arm-left-socket" type="Node2D" parent="npc7/body/torso"]
+position = Vector2(-6.59, 2.76)
+
+[node name="arm-right-socket" type="Node2D" parent="npc7/body/torso"]
+position = Vector2(6.035, 2.76)
+
+[node name="leg-left2" type="Sprite2D" parent="npc7/body/torso"]
+visible = false
+z_index = -1
+position = Vector2(-0.266667, 9.33337)
+scale = Vector2(0.779861, 0.779861)
+texture = ExtResource("11_r4whv")
+offset = Vector2(0, -2.47)
+
+[node name="hitbox" type="CollisionShape2D" parent="npc7/body"]
+position = Vector2(-5, 43)
+scale = Vector2(0.972612, 1.07096)
+shape = SubResource("RectangleShape2D_57qbr")
+
+[node name="camera" type="Camera2D" parent="npc7"]
+position = Vector2(-6, -34)
+zoom = Vector2(0.805, 0.805)
+
 [node name="cane" type="RigidBody2D" parent="."]
 position = Vector2(-99, 361)
 rotation = -1.43345
@@ -110,7 +754,7 @@ texture_filter = 1
 scale = Vector2(8.14478, 8.14478)
 texture = ExtResource("8_jdody")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="cane"]
+[node name="hitbox" type="CollisionShape2D" parent="cane"]
 position = Vector2(0.498432, -171.685)
 scale = Vector2(18.3235, 1.71272)
 shape = SubResource("RectangleShape2D_bta34")

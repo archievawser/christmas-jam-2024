@@ -9,6 +9,8 @@ extends RigidBody2D
 @export var camera: Camera2D;
 @export var torso: Sprite2D;
 @export var root: Node2D;
+@export var legLength: float;
+@export var legDamper: float;
 var gravity: float = 2500;
 var facingRight: bool = false;
 var headFacingRight: bool = false;
@@ -84,12 +86,12 @@ func _build_legs() -> void:
 		var physicalLeg = Spring2D.new();
 		physicalLeg.body = self;
 		physicalLeg.stiffness = 1000;
-		physicalLeg.damper = 40;
+		physicalLeg.damper = legDamper;
 		physicalLeg.centralForce = false;
 		add_child(physicalLeg);
 
 		physicalLeg.global_position = limbSockets[legName].global_position;
-		physicalLeg.target_position = Vector2(0, 55);
+		physicalLeg.target_position = Vector2(0, legLength);
 		
 		legSprings[legName] = physicalLeg;
 
