@@ -8,6 +8,11 @@ extends RayCast2D;
 @export var centralForce: bool;
 var length: float;
 var previousLength: float;
+var hitPosition: Vector2;
+
+
+func _init() -> void:
+	pass;
 
 
 func _ready() -> void:
@@ -15,18 +20,21 @@ func _ready() -> void:
 	previousLength = length;
 
 
-func _process(dt: float) -> void:
-	var springDirection = global_position - get_collision_point();
-	var distance = springDirection.length(); 
-	var impulse = springDirection.normalized() * _calculate_spring_impulse_magnitude(distance, dt);
-	
-	if is_colliding():
+func _physics_process(dt: float) -> void:
+	if is_colliding():	
+		hitPosition = get_collision_point();
+		var springDirection = global_position - get_collision_point();
+		var distance = springDirection.length(); 
+		var impulse = springDirection.normalized() * _calculate_spring_impulse_magnitude(distance, dt);
+
 		if centralForce:
 			body.apply_central_impulse(impulse * dt);
 		else:
 			body.apply_impulse(impulse * dt, self.position);
 		
 		previousLength = distance;
+	else:
+		hitPosition = global_position + target_position;
 
 
 # Hooke's law
