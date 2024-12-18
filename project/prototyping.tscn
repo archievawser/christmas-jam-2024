@@ -1,64 +1,27 @@
-[gd_scene load_steps=10 format=3 uid="uid://bfvqgu4cskm6t"]
+[gd_scene load_steps=11 format=3 uid="uid://bfvqgu4cskm6t"]
 
 [ext_resource type="Script" path="res://prototyping.gd" id="1_cfq31"]
 [ext_resource type="Texture2D" uid="uid://dmfjbmacaaiv2" path="res://player/santas-hand.png" id="2_k6sdo"]
 [ext_resource type="Texture2D" uid="uid://8fmdbqlxjhah" path="res://player/santa-torso.png" id="3_xscpu"]
 [ext_resource type="Texture2D" uid="uid://bq5xlntqixy1c" path="res://player/santa-head.png" id="4_i7jo1"]
 [ext_resource type="Texture2D" uid="uid://biiw2oayiulx5" path="res://player/santa-foot.png" id="5_ghto1"]
-[ext_resource type="Script" path="res://player/character_movement.gd" id="7_4kvpo"]
+[ext_resource type="Script" path="res://player/scripts/player-character.gd" id="5_i6vso"]
 [ext_resource type="Texture2D" uid="uid://bej1c1p2evaqy" path="res://player/cane.png" id="8_jdody"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_0eaox"]
-size = Vector2(20952, 455)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_57qbr"]
-size = Vector2(102, 84.5)
+size = Vector2(102, 88.5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bta34"]
+size = Vector2(3.91763, 42.4205)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r8qjm"]
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_cfq31")
 
-[node name="ground" type="Node2D" parent="."]
-position = Vector2(570, 641)
-
-[node name="Sprite2D" type="Sprite2D" parent="ground"]
-z_index = 1
-position = Vector2(-480, 15)
-scale = Vector2(43.515, 3.71)
-texture = ExtResource("3_xscpu")
-
-[node name="RigidBody2D" type="RigidBody2D" parent="ground"]
-position = Vector2(1, 0)
-freeze = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ground/RigidBody2D"]
-position = Vector2(-10043, 14)
-shape = SubResource("RectangleShape2D_0eaox")
-
-[node name="ground2" type="Node2D" parent="."]
-position = Vector2(570, 641)
-
-[node name="Sprite2D" type="Sprite2D" parent="ground2"]
-z_index = 1
-position = Vector2(-480, 15)
-scale = Vector2(43.515, 3.71)
-texture = ExtResource("3_xscpu")
-
-[node name="RigidBody2D" type="RigidBody2D" parent="ground2"]
-position = Vector2(1, 0)
-freeze = true
-angular_damp = -1.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ground2/RigidBody2D"]
-position = Vector2(868.5, -189.5)
-rotation = -0.16057
-shape = SubResource("RectangleShape2D_0eaox")
-
 [node name="character" type="Node2D" parent="."]
 texture_filter = 1
-
-[node name="camera" type="Camera2D" parent="character"]
-position = Vector2(-4, -160)
-zoom = Vector2(0.805, 0.805)
+position = Vector2(-961, -124)
 
 [node name="head" type="Sprite2D" parent="character"]
 z_index = 1
@@ -98,17 +61,17 @@ offset = Vector2(-2.5, -10.02)
 
 [node name="body" type="RigidBody2D" parent="character" node_paths=PackedStringArray("camera", "torso", "root")]
 texture_filter = 1
-position = Vector2(6, 0)
-continuous_cd = 2
-script = ExtResource("7_4kvpo")
-moveSpeed = 1000.0
-jumpForce = 900.0
+position = Vector2(6, 2)
+mass = 7.0
+can_sleep = false
+script = ExtResource("5_i6vso")
+moveSpeed = 5000.0
+jumpForce = 7000.0
 friction = 0.4
 cameraSpeed = 10.0
 camera = NodePath("../camera")
 torso = NodePath("torso")
 root = NodePath("..")
-moving = null
 
 [node name="torso" type="Sprite2D" parent="character/body"]
 position = Vector2(-3, 32.9997)
@@ -119,10 +82,10 @@ texture = ExtResource("3_xscpu")
 position = Vector2(-0.96, -6.475)
 
 [node name="leg-left-socket" type="Node2D" parent="character/body/torso"]
-position = Vector2(-3.2, 5.60004)
+position = Vector2(-3.2, 5.46675)
 
 [node name="leg-right-socket" type="Node2D" parent="character/body/torso"]
-position = Vector2(3.2, 5.6)
+position = Vector2(3.2, 5.46671)
 
 [node name="arm-left-socket" type="Node2D" parent="character/body/torso"]
 position = Vector2(-6.59, 2.76)
@@ -131,11 +94,32 @@ position = Vector2(-6.59, 2.76)
 position = Vector2(6.035, 2.76)
 
 [node name="hitbox" type="CollisionShape2D" parent="character/body"]
-position = Vector2(-3, 36.75)
+position = Vector2(-3, 38.75)
 shape = SubResource("RectangleShape2D_57qbr")
 
-[node name="Sprite2D" type="Sprite2D" parent="character"]
+[node name="camera" type="Camera2D" parent="character"]
+position = Vector2(-6, -34)
+zoom = Vector2(0.805, 0.805)
+
+[node name="cane" type="RigidBody2D" parent="."]
 position = Vector2(-99, 361)
 rotation = -1.43345
-scale = Vector2(7.07283, 7.07283)
+
+[node name="sprite" type="Sprite2D" parent="cane"]
+texture_filter = 1
+scale = Vector2(8.14478, 8.14478)
 texture = ExtResource("8_jdody")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="cane"]
+position = Vector2(0.498432, -171.685)
+scale = Vector2(18.3235, 1.71272)
+shape = SubResource("RectangleShape2D_bta34")
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+position = Vector2(-2, 552)
+scale = Vector2(1, 0.997594)
+freeze = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+scale = Vector2(473.21, 4.55633)
+shape = SubResource("RectangleShape2D_r8qjm")
