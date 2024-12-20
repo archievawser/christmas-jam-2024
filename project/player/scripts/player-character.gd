@@ -11,6 +11,8 @@ extends RigidBody2D
 @export var root: Node2D;
 @export var legLength: float;
 @export var legDamper: float;
+@export var legStiffness: float;
+@export var currentItem: Equipable;
 var gravity: float = 2500;
 var facingRight: bool = false;
 var headFacingRight: bool = false;
@@ -20,6 +22,7 @@ var limbNames: Array = ["head", "arm-left", "arm-right", "leg-left", "leg-right"
 var armNames: Array = ["arm-left", "arm-right"];
 var legNames: Array = ["leg-left", "leg-right"];
 var legSprings: Dictionary;
+var defaultLimbSockets: Dictionary;
 var limbSockets: Dictionary;
 var limbs: Dictionary;
 var headFlipOffset: float;
@@ -33,6 +36,9 @@ func _ready() -> void:
 	_build_legs();
 	_update_limb_positions();
 
+	if currentItem:
+		_equip(currentItem);
+		
 	Engine.time_scale = 1;
 
 	headFlipOffset = limbs["head"].offset.x;
@@ -44,6 +50,9 @@ func _process(delta: float) -> void:
 	_update_limb_positions();
 	_update_camera_position();
 	_update_head_rotation();
+
+	if currentItem && Input.is_action_just_pressed("activate"):
+		currentItem.activate();
 		
 
 func _physics_process(delta: float) -> void:
@@ -52,11 +61,22 @@ func _physics_process(delta: float) -> void:
 	currentMoveVector = _apply_character_movement();
 	_apply_leg_friction();
 
+	if currentItem:
+		currentItem.aim_at(camera.get_global_mouse_position());
+
 	if _can_jump():
 		if Input.is_action_pressed("jump"):
 			_prime_jump();
 		elif Input.is_action_just_released("jump"):
 			_jump();
+
+
+func _equip(item: Equipable) -> void:
+	if item.dominantHandGrip:
+		limbSockets["arm-right"] = item.dominantHandGrip;
+
+	if item.weakHandGrip:
+		limbSockets["arm-left"] = item.weakHandGrip;
 
 
 func _can_jump() -> bool:
@@ -66,7 +86,7 @@ func _can_jump() -> bool:
 func _prime_jump() -> void:
 	for legName in legNames:
 		var physicalLeg: Spring2D = legSprings[legName];
-		physicalLeg.stiffness = 300;
+		physicalLeg.stiffness = legStiffness / 3;
 
 
 func _jump() -> void:
@@ -74,7 +94,7 @@ func _jump() -> void:
 
 	for legName in legNames:
 		var physicalLeg: Spring2D = legSprings[legName];
-		physicalLeg.stiffness = 1000;
+		physicalLeg.stiffness = legStiffness;
 
 	
 func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
@@ -85,7 +105,7 @@ func _build_legs() -> void:
 	for legName in legNames:
 		var physicalLeg = Spring2D.new();
 		physicalLeg.body = self;
-		physicalLeg.stiffness = 1000;
+		physicalLeg.stiffness = legStiffness;
 		physicalLeg.damper = legDamper;
 		physicalLeg.centralForce = false;
 		add_child(physicalLeg);
@@ -110,13 +130,33 @@ func _track_physical_legs() -> void:
 			legSprite.global_position = lerp(legSprite.global_position, physicalLeg.hitPosition, 100 * frameDelta);
 
 
+func _track_arms() -> void:
+	if currentItem:
+		if currentItem.weakHandGrip:
+			_move_limb_to_explicit_socket("arm-left", currentItem.weakHandGrip);
+		else:
+			_move_limb_to_socket("arm-left");
+
+		if currentItem.dominantHandGrip:
+			_move_limb_to_explicit_socket("arm-right", currentItem.dominantHandGrip);
+		else:
+			_move_limb_to_socket("arm-right");
+	else:
+		for armName in armNames:
+			_lerp_limb_to_socket(armName, 20);
+
+
+
 func _setup_limb_lookup() -> void:
 	for limbName in limbNames:
 		limbs[limbName] = root.find_child(limbName);
-		limbSockets[limbName] = torso.find_child(limbName + "-socket");
+		
+		var limbSocket = torso.find_child(limbName + "-socket");
+		limbSockets[limbName] = limbSocket;
+		defaultLimbSockets[limbName] = limbSocket;
 
 
-func _lerp_limb_to_socket(limbName, speed) -> void:
+func _lerp_limb_to_socket(limbName: String, speed: float) -> void:
 	var offset = limbs[limbName].global_position - limbSockets[limbName].global_position;
 	var constrainedOffset = offset.normalized() * clamp(offset.length(), 0, 20);
 	var constrainedPosition = limbSockets[limbName].global_position + constrainedOffset;
@@ -124,14 +164,17 @@ func _lerp_limb_to_socket(limbName, speed) -> void:
 	limbs[limbName].global_position = lerp(constrainedPosition, limbSockets[limbName].global_position, speed * frameDelta);
 
 
-func _move_limb_to_socket(limbName) -> void:
+func _move_limb_to_socket(limbName: String) -> void:
 	limbs[limbName].global_position = limbSockets[limbName].global_position;
 
 
-func _update_limb_positions() -> void:
-	for armName in armNames:
-		_lerp_limb_to_socket(armName, 20);
+func _move_limb_to_explicit_socket(limbName: String, socket: Node2D) -> void:
+	limbs[limbName].global_position = socket.global_position;
+	limbs[limbName].global_rotation = limbSockets[limbName].global_rotation;
+	
 
+func _update_limb_positions() -> void:
+	_track_arms();
 	_track_physical_legs();
 	_move_limb_to_socket("head");
 
@@ -144,10 +187,7 @@ func _apply_leg_friction() -> void:
 			if moving && sign(linear_velocity.x) == sign(currentMoveVector.x):
 				physicalLeg.rotation = lerp(physicalLeg.rotation, clamp(currentMoveVector.x / 500, -1.0, 1.0), 5 * physicsDelta);
 			else:
-				var sliding = abs(linear_velocity.x) > 5;
-
-				if sliding:
-					physicalLeg.rotation = lerp(physicalLeg.rotation, clamp(friction * -sign(linear_velocity.x) * abs(linear_velocity.x) / 230, -1.0, 1.0), 5 * physicsDelta);
+				physicalLeg.rotation = lerp(physicalLeg.rotation, clamp(friction * -sign(linear_velocity.x) * abs(linear_velocity.x) / 230, -1.0, 1.0), 5 * physicsDelta);
 		else:
 			physicalLeg.rotation = lerp(physicalLeg.rotation, 0.0, 10 * physicsDelta);
 				
@@ -171,9 +211,12 @@ func _apply_character_movement() -> Vector2:
 func _face_character_right() -> void:
 	facingRight = true;
 	torso.flip_h = true;
+	
+	if currentItem:
+		currentItem.set_look_direction(facingRight);
 
-	limbs["arm-right"].z_index = -1;
-	limbs["arm-left"].z_index = 1;
+	limbs["arm-right"].z_index = 3 if currentItem.dominantHandGrip else -1;
+	limbs["arm-left"].z_index = 3 if currentItem.weakHandGrip else 1;
 
 	for legName in legNames:
 		limbs[legName].flip_h = true;
@@ -189,9 +232,12 @@ func _face_head_right() -> void:
 func _face_character_left() -> void:
 	facingRight = false;
 	torso.flip_h = false;
+	
+	if currentItem:
+		currentItem.set_look_direction(facingRight);
 
-	limbs["arm-right"].z_index = 1;
-	limbs["arm-left"].z_index = -1;
+	limbs["arm-right"].z_index = 3 if currentItem.dominantHandGrip else 1;
+	limbs["arm-left"].z_index = 3 if currentItem.weakHandGrip else -1;
 
 	for legName in legNames:
 		limbs[legName].flip_h = false;

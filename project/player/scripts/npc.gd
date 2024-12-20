@@ -12,3 +12,7 @@ func _can_jump() -> bool:
 
 func _update_head_rotation() -> void:
 	pass;
+
+
+func _update_camera_position() -> void:
+	pass;
