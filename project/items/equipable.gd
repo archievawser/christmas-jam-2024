@@ -6,6 +6,7 @@ extends Node2D
 @export var dominantHandGrip: Node2D;
 @export var body: RigidBody2D;
 @export var facingLeft: bool;
+var aimingAt: Vector2;
 
 
 func activate() -> void:
@@ -30,6 +31,7 @@ func flip() -> void:
 
 
 func aim_at(target: Vector2) -> void:
+	aimingAt = target;
 	var offset = body.global_position - target;
 	var angle = atan2(offset.y, offset.x);
 	

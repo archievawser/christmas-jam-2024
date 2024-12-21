@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://bfvqgu4cskm6t"]
+[gd_scene load_steps=25 format=3 uid="uid://bfvqgu4cskm6t"]
 
 [ext_resource type="Script" path="res://prototyping.gd" id="1_cfq31"]
 [ext_resource type="Texture2D" uid="uid://dmfjbmacaaiv2" path="res://player/santas-hand.png" id="2_k6sdo"]
@@ -13,18 +13,26 @@
 [ext_resource type="Texture2D" uid="uid://oy3o8ohdntdh" path="res://snowman/snowman-leg.png" id="11_r4whv"]
 [ext_resource type="Texture2D" uid="uid://dyaqj3govc3ow" path="res://snowman/snowman-torso.png" id="11_vm651"]
 [ext_resource type="Texture2D" uid="uid://dplxqf22dpcf6" path="res://items/pistol/pistol.png" id="12_f7s3o"]
+[ext_resource type="Texture2D" uid="uid://bl8hbx45usm6n" path="res://snowman/cart.png" id="13_j6qvd"]
 [ext_resource type="Script" path="res://items/pistol/pistol.gd" id="13_t1y00"]
-[ext_resource type="Texture2D" uid="uid://ddwixxoutq26k" path="res://items/pistol/empty.png" id="15_avqr1"]
 [ext_resource type="AudioStream" uid="uid://clfltrd5u1ih0" path="res://items/pistol/pistol-1.wav" id="15_fjrmf"]
+[ext_resource type="Texture2D" uid="uid://bw3jp6tqy3xb1" path="res://environment/slope.png" id="16_b5ao5"]
+[ext_resource type="Texture2D" uid="uid://bej1c1p2evaqy" path="res://player/cane.png" id="17_e5717"]
+[ext_resource type="Script" path="res://environment/infinite-walker.gd" id="20_bt38b"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_57qbr"]
 size = Vector2(102, 88.5)
 
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_g8v6w"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bta34"]
 size = Vector2(3.91763, 42.4205)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_r8qjm"]
-size = Vector2(20, 237.144)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bgfbl"]
+size = Vector2(79.914, 28.6506)
+
+[sub_resource type="LabelSettings" id="LabelSettings_cd5gi"]
+font_size = 36
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_cfq31")
@@ -87,6 +95,8 @@ legLength = 55.0
 legDamper = 40.0
 legStiffness = 1000.0
 currentItem = NodePath("../../pistol")
+passiveFrictionPower = 0.05
+health = null
 
 [node name="torso" type="Sprite2D" parent="character/body"]
 position = Vector2(-3, 32.9997)
@@ -126,75 +136,78 @@ centralForce = true
 
 [node name="camera" type="Camera2D" parent="character"]
 position = Vector2(-6, -34)
-zoom = Vector2(0.805, 0.805)
+offset = Vector2(0, 180.47)
+zoom = Vector2(0.5, 0.5)
 
 [node name="npc" type="Node2D" parent="."]
 texture_filter = 1
-position = Vector2(28, -222)
+position = Vector2(-1969, 1026)
 
 [node name="head" type="Sprite2D" parent="npc"]
-z_index = 1
-position = Vector2(-4, -13)
-scale = Vector2(7.89286, 7.89286)
+z_index = 2
+position = Vector2(-3, -48)
+scale = Vector2(15.2205, 15.2205)
 texture = ExtResource("7_avqii")
 centered = false
 offset = Vector2(-4.83, -7.665)
 
 [node name="arm-left" type="Sprite2D" parent="npc"]
-z_index = -1
-position = Vector2(-53.25, 51.0357)
-scale = Vector2(7.5, 7.5)
+z_index = 2
+position = Vector2(-44, 164)
+scale = Vector2(15.3418, 15.3418)
 texture = ExtResource("8_7u3ln")
 
 [node name="arm-right" type="Sprite2D" parent="npc"]
-z_index = 1
-position = Vector2(42.39, 53.495)
-scale = Vector2(7.5, 7.5)
+z_index = 2
+position = Vector2(225, 110)
+scale = Vector2(16.0783, 16.0783)
 texture = ExtResource("8_7u3ln")
 
 [node name="leg-left" type="Sprite2D" parent="npc"]
-z_index = -1
-position = Vector2(-30, 123.5)
-scale = Vector2(7.5, 7.5)
-texture = ExtResource("11_r4whv")
-offset = Vector2(0, -2.02)
+z_index = 2
+position = Vector2(-46, 201)
+scale = Vector2(13.5653, 13.5653)
+texture = ExtResource("8_7u3ln")
+offset = Vector2(0, -2.52)
 
 [node name="leg-right" type="Sprite2D" parent="npc"]
-z_index = -1
-position = Vector2(16, 124)
-scale = Vector2(7.5, 7.5)
-texture = ExtResource("11_r4whv")
-offset = Vector2(0, -2.06)
+z_index = 2
+position = Vector2(52, 196)
+scale = Vector2(13.0383, 13.0383)
+texture = ExtResource("8_7u3ln")
+offset = Vector2(0, -2.46)
 
 [node name="body" type="RigidBody2D" parent="npc" node_paths=PackedStringArray("torso", "root")]
 texture_filter = 1
 position = Vector2(6, 2)
-collision_layer = 2
+collision_layer = 4
 mass = 8.985
 can_sleep = false
 script = ExtResource("7_p6qj8")
 moveSpeed = 5000.0
 jumpForce = 7000.0
-friction = 3.0
+friction = 0.01
 torso = NodePath("torso")
 root = NodePath("..")
-legLength = 50.0
-legDamper = 30.0
-legStiffness = 1000.0
+legLength = 200.0
+legDamper = 50.0
+legStiffness = 1500.0
 
 [node name="torso" type="Sprite2D" parent="npc/body"]
+z_index = 1
+material = SubResource("CanvasItemMaterial_g8v6w")
 position = Vector2(-3, 43)
-scale = Vector2(7.5, 7.5)
+scale = Vector2(13.9416, 13.9416)
 texture = ExtResource("11_vm651")
 
 [node name="head-socket" type="Node2D" parent="npc/body/torso"]
-position = Vector2(-0.96, -6.475)
+position = Vector2(-0.358638, -6.67067)
 
 [node name="leg-left-socket" type="Node2D" parent="npc/body/torso"]
-position = Vector2(-3.2, 4.00004)
+position = Vector2(-3.15602, 5.52307)
 
 [node name="leg-right-socket" type="Node2D" parent="npc/body/torso"]
-position = Vector2(3.2, 4)
+position = Vector2(3.156, 5.523)
 
 [node name="arm-left-socket" type="Node2D" parent="npc/body/torso"]
 position = Vector2(-6.59, 2.76)
@@ -210,22 +223,38 @@ scale = Vector2(0.779861, 0.779861)
 texture = ExtResource("11_r4whv")
 offset = Vector2(0, -2.47)
 
-[node name="hitbox" type="CollisionShape2D" parent="npc/body"]
+[node name="torso-hitbox" type="CollisionShape2D" parent="npc/body"]
 position = Vector2(-5, 43)
-scale = Vector2(0.972612, 1.07096)
+scale = Vector2(1.9236, 2.11811)
 shape = SubResource("RectangleShape2D_57qbr")
 
-[node name="pistol" type="Node2D" parent="." node_paths=PackedStringArray("shootStream", "sprite", "dominantHandGrip", "body")]
+[node name="Sprite2D" type="Sprite2D" parent="npc/body"]
+position = Vector2(-4, 101)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("13_j6qvd")
+
+[node name="InfiniteWalker" type="Node2D" parent="." node_paths=PackedStringArray("cam", "firstCollider", "firstSprite", "secondCollider", "secondSprite")]
+position = Vector2(-961, -124)
+script = ExtResource("20_bt38b")
+cam = NodePath("../character/camera")
+firstCollider = NodePath("../RigidBody2D/first-collider")
+firstSprite = NodePath("../RigidBody2D/first-sprite")
+secondCollider = NodePath("../RigidBody2D/second-collider")
+secondSprite = NodePath("../RigidBody2D/second-sprite")
+
+[node name="pistol" type="Node2D" parent="." node_paths=PackedStringArray("shootStream", "barrelSocket", "sprite", "dominantHandGrip", "body")]
 position = Vector2(-846, 120)
 script = ExtResource("13_t1y00")
 shootStream = NodePath("body/shoot-sound")
+bulletSpeed = 20000.0
+barrelSocket = NodePath("body/sprite/barrel-socket")
 sprite = NodePath("body/sprite")
 dominantHandGrip = NodePath("body/sprite/grip-socket")
 body = NodePath("body")
 facingLeft = true
 
 [node name="body" type="RigidBody2D" parent="pistol"]
-collision_layer = 2
+collision_layer = 0
 mass = 5.287
 gravity_scale = 0.753
 linear_damp = 5.0
@@ -250,17 +279,90 @@ texture = ExtResource("12_f7s3o")
 position = Vector2(3.56056, 1.96445)
 scale = Vector2(0.122778, 0.122778)
 
+[node name="barrel-socket" type="Node2D" parent="pistol/body/sprite"]
+position = Vector2(-5.77057, -1.59611)
+scale = Vector2(0.122778, 0.122778)
+
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
-position = Vector2(-2, 552)
-scale = Vector2(1, 0.999089)
+position = Vector2(-5226, -14)
 freeze = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
-position = Vector2(0, 494.69)
-scale = Vector2(473.21, 4.55633)
-shape = SubResource("RectangleShape2D_r8qjm")
+[node name="first-sprite" type="Sprite2D" parent="RigidBody2D"]
+texture_filter = 1
+position = Vector2(-22, 606)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("16_b5ao5")
 
-[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
-position = Vector2(-6, 489.446)
-scale = Vector2(9409.01, -1070.44)
-texture = ExtResource("15_avqr1")
+[node name="first-collider" type="CollisionShape2D" parent="RigidBody2D"]
+position = Vector2(-18, 982)
+scale = Vector2(46.8705, 13.1104)
+shape = SubResource("RectangleShape2D_bgfbl")
+
+[node name="second-sprite" type="Sprite2D" parent="RigidBody2D"]
+texture_filter = 1
+position = Vector2(3725, 606)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("16_b5ao5")
+
+[node name="second-collider" type="CollisionShape2D" parent="RigidBody2D"]
+position = Vector2(3725, 983)
+scale = Vector2(46.8705, 13.1104)
+shape = SubResource("RectangleShape2D_bgfbl")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+offset = Vector2(1, 1)
+transform = Transform2D(1, 0, 0, 1, 1, 1)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+alignment = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/VBoxContainer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 10
+alignment = 1
+
+[node name="BoxContainer" type="BoxContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+custom_minimum_size = Vector2(10, 0)
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+texture = ExtResource("17_e5717")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "x40
+"
+label_settings = SubResource("LabelSettings_cd5gi")
+
+[node name="BoxContainer" type="BoxContainer" parent="CanvasLayer/VBoxContainer"]
+custom_minimum_size = Vector2(0, 10)
+layout_mode = 2
+
+[node name="Node2D2" type="Node2D" parent="."]
+position = Vector2(-3373, 946)
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(-7135, 978)

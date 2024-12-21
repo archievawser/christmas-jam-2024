@@ -13,6 +13,8 @@ extends RigidBody2D
 @export var legDamper: float;
 @export var legStiffness: float;
 @export var currentItem: Equipable;
+@export var passiveFrictionPower: float;
+@export var health: float = 100;
 var gravity: float = 2500;
 var facingRight: bool = false;
 var headFacingRight: bool = false;
@@ -50,9 +52,13 @@ func _process(delta: float) -> void:
 	_update_limb_positions();
 	_update_camera_position();
 	_update_head_rotation();
+	_apply_passive_friction();
 
-	if currentItem && Input.is_action_just_pressed("activate"):
-		currentItem.activate();
+	if currentItem:
+		if Input.is_action_just_pressed("activate"):
+			currentItem.activate();
+		if currentItem && Input.is_action_just_pressed("activate"):
+			currentItem.deactivate();
 		
 
 func _physics_process(delta: float) -> void:
@@ -77,6 +83,14 @@ func _equip(item: Equipable) -> void:
 
 	if item.weakHandGrip:
 		limbSockets["arm-left"] = item.weakHandGrip;
+
+
+func take_damage(dmg: float) -> void:
+	health -= dmg;
+
+
+func _apply_passive_friction() -> void:
+	apply_central_force((linear_velocity * abs(linear_velocity)) * -passiveFrictionPower * frameDelta);
 
 
 func _can_jump() -> bool:
