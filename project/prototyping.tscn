@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://bfvqgu4cskm6t"]
+[gd_scene load_steps=28 format=3 uid="uid://bfvqgu4cskm6t"]
 
 [ext_resource type="Script" path="res://prototyping.gd" id="1_cfq31"]
 [ext_resource type="Texture2D" uid="uid://dmfjbmacaaiv2" path="res://player/santas-hand.png" id="2_k6sdo"]
@@ -17,8 +17,9 @@
 [ext_resource type="Script" path="res://items/pistol/pistol.gd" id="13_t1y00"]
 [ext_resource type="AudioStream" uid="uid://clfltrd5u1ih0" path="res://items/pistol/pistol-1.wav" id="15_fjrmf"]
 [ext_resource type="Texture2D" uid="uid://bw3jp6tqy3xb1" path="res://environment/slope.png" id="16_b5ao5"]
-[ext_resource type="Texture2D" uid="uid://bej1c1p2evaqy" path="res://player/cane.png" id="17_e5717"]
+[ext_resource type="Script" path="res://snowman/cart.gd" id="19_5pdcc"]
 [ext_resource type="Script" path="res://environment/infinite-walker.gd" id="20_bt38b"]
+[ext_resource type="Texture2D" uid="uid://2c4us7gjicqh" path="res://environment/slope-bg.png" id="20_gbm4u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_57qbr"]
 size = Vector2(102, 88.5)
@@ -28,11 +29,39 @@ size = Vector2(102, 88.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bta34"]
 size = Vector2(3.91763, 42.4205)
 
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_00kj5"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(-51, -110, 0)
+emission_shape_scale = Vector3(50, 1, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 1, 0)
+spread = 3.706
+initial_velocity_min = 7.17
+initial_velocity_max = 14.71
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+scale_max = 0.3
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bgfbl"]
 size = Vector2(79.914, 28.6506)
 
-[sub_resource type="LabelSettings" id="LabelSettings_cd5gi"]
-font_size = 36
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_fmni2"]
+particle_flag_disable_z = true
+emission_shape_offset = Vector3(51, -110, 0)
+emission_shape_scale = Vector3(50, 1, 1)
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 1, 0)
+spread = 3.706
+initial_velocity_min = 7.17
+initial_velocity_max = 14.71
+gravity = Vector3(0, 0, 0)
+scale_min = 0.2
+scale_max = 0.3
+
+[sub_resource type="LabelSettings" id="LabelSettings_rvwn5"]
+font_size = 31
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_cfq31")
@@ -140,6 +169,7 @@ offset = Vector2(0, 180.47)
 zoom = Vector2(0.5, 0.5)
 
 [node name="npc" type="Node2D" parent="."]
+visible = false
 texture_filter = 1
 position = Vector2(-1969, 1026)
 
@@ -293,6 +323,15 @@ position = Vector2(-22, 606)
 scale = Vector2(7.5, 7.5)
 texture = ExtResource("16_b5ao5")
 
+[node name="GPUParticles2D" type="GPUParticles2D" parent="RigidBody2D/first-sprite"]
+z_index = -2
+position = Vector2(249.067, 178.933)
+scale = Vector2(4.985, 4.985)
+amount = 378
+process_material = SubResource("ParticleProcessMaterial_00kj5")
+lifetime = 12.0
+local_coords = true
+
 [node name="first-collider" type="CollisionShape2D" parent="RigidBody2D"]
 position = Vector2(-18, 982)
 scale = Vector2(46.8705, 13.1104)
@@ -304,6 +343,15 @@ position = Vector2(3725, 606)
 scale = Vector2(7.5, 7.5)
 texture = ExtResource("16_b5ao5")
 
+[node name="GPUParticles2D" type="GPUParticles2D" parent="RigidBody2D/second-sprite"]
+z_index = -2
+position = Vector2(-250.267, 173.733)
+scale = Vector2(4.985, 4.985)
+amount = 378
+process_material = SubResource("ParticleProcessMaterial_fmni2")
+lifetime = 12.0
+local_coords = true
+
 [node name="second-collider" type="CollisionShape2D" parent="RigidBody2D"]
 position = Vector2(3725, 983)
 scale = Vector2(46.8705, 13.1104)
@@ -313,56 +361,44 @@ shape = SubResource("RectangleShape2D_bgfbl")
 offset = Vector2(1, 1)
 transform = Transform2D(1, 0, 0, 1, 1, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer"]
+[node name="Main" type="PanelContainer" parent="CanvasLayer"]
 texture_filter = 1
-anchors_preset = 15
-anchor_right = 1.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
 anchor_bottom = 1.0
 grow_horizontal = 2
-grow_vertical = 2
-size_flags_horizontal = 4
-size_flags_vertical = 8
-alignment = 2
-metadata/_edit_use_anchors_ = true
+grow_vertical = 0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/VBoxContainer"]
+[node name="MarginContainer" type="MarginContainer" parent="CanvasLayer/Main"]
 layout_mode = 2
-size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/VBoxContainer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 20)
+[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/Main/MarginContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="CanvasLayer/VBoxContainer"]
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Main/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(60, 60)
 layout_mode = 2
-size_flags_vertical = 10
-alignment = 1
+texture = ExtResource("4_i7jo1")
+stretch_mode = 4
 
-[node name="BoxContainer" type="BoxContainer" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(10, 0)
+[node name="Label" type="Label" parent="CanvasLayer/Main/MarginContainer/HBoxContainer"]
 layout_mode = 2
-
-[node name="TextureRect" type="TextureRect" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-texture = ExtResource("17_e5717")
-expand_mode = 3
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/HBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
 size_flags_vertical = 1
-text = "x40
-"
-label_settings = SubResource("LabelSettings_cd5gi")
+text = "x 10"
+label_settings = SubResource("LabelSettings_rvwn5")
+horizontal_alignment = 3
+vertical_alignment = 1
 
-[node name="BoxContainer" type="BoxContainer" parent="CanvasLayer/VBoxContainer"]
-custom_minimum_size = Vector2(0, 10)
-layout_mode = 2
+[node name="Node2D3" type="Node2D" parent="."]
+position = Vector2(-2053, 1334)
+script = ExtResource("19_5pdcc")
 
-[node name="Node2D2" type="Node2D" parent="."]
-position = Vector2(-3373, 946)
-
-[node name="Node2D" type="Node2D" parent="."]
-position = Vector2(-7135, 978)
+[node name="Sprite2D" type="Sprite2D" parent="Node2D3"]
+scale = Vector2(441.659, -218.597)
+texture = ExtResource("20_gbm4u")

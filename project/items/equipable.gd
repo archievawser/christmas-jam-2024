@@ -7,6 +7,16 @@ extends Node2D
 @export var body: RigidBody2D;
 @export var facingLeft: bool;
 var aimingAt: Vector2;
+var defaultWeakGripSign;
+var defaultDominantGripSign;
+
+
+func _ready() -> void:
+	if weakHandGrip:
+		defaultWeakGripSign = sign(weakHandGrip.position.x);
+
+	if dominantHandGrip:
+		defaultDominantGripSign = sign(dominantHandGrip.position.x);
 
 
 func activate() -> void:
@@ -22,10 +32,10 @@ func flip() -> void:
 	sprite.flip_h = facingLeft;
 
 	if weakHandGrip:
-		weakHandGrip.position.x = abs(weakHandGrip.position.x) * (-1 if facingLeft else 1);
+		weakHandGrip.position.x = abs(weakHandGrip.position.x) * (-defaultWeakGripSign if facingLeft else defaultWeakGripSign);
 	
 	if dominantHandGrip:
-		dominantHandGrip.position.x = abs(dominantHandGrip.position.x) * (-1 if facingLeft else 1);
+		dominantHandGrip.position.x = abs(dominantHandGrip.position.x) * (-defaultDominantGripSign if facingLeft else defaultDominantGripSign);
 
 	sprite.position.x = abs(sprite.position.x) * (1 if facingLeft else -1);
 
