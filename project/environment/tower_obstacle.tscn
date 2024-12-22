@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://66ugy06eddoy"]
+
+[ext_resource type="Script" path="res://environment/basic_obstacle.gd" id="1_tyo2v"]
+[ext_resource type="Texture2D" uid="uid://b0ml8a18ofmaw" path="res://environment/basic-obstacle.png" id="2_p2ged"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wlhvf"]
+size = Vector2(212.5, 334.25)
+
+[node name="basic-obstacle" type="CollisionShape2D"]
+z_index = 1
+position = Vector2(0, 57.125)
+shape = SubResource("RectangleShape2D_wlhvf")
+script = ExtResource("1_tyo2v")
+span = 220.0
+spawnHeight = 880.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, 59.875)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("2_p2ged")

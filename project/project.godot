@@ -13,6 +13,9 @@ config_version=5
 config/name="project"
 run/main_scene="res://prototyping.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/image="res://splash.png"
+boot_splash/fullsize=false
 config/icon="res://icon.svg"
 
 [display]
@@ -67,4 +70,3 @@ activate={
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-environment/defaults/default_clear_color=Color(0.341176, 0.447059, 0.466667, 1)

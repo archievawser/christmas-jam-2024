@@ -1,0 +1,12 @@
+[gd_resource type="Theme" load_steps=3 format=3 uid="uid://b5mysgud7232h"]
+
+[ext_resource type="FontFile" uid="uid://ysw31hciibpg" path="res://shop/rainyhearts.ttf" id="1_r24wp"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_p4tpe"]
+
+[resource]
+Label/colors/font_color = Color(1, 1, 1, 1)
+Label/colors/font_outline_color = Color(0.503197, 0.170406, 0.223974, 1)
+Label/font_sizes/font_size = 24
+Label/fonts/font = ExtResource("1_r24wp")
+PanelContainer/styles/panel = SubResource("StyleBoxEmpty_p4tpe")

@@ -1,0 +1,91 @@
+[gd_scene load_steps=4 format=3 uid="uid://dehkdqfs5r4b5"]
+
+[ext_resource type="Texture2D" uid="uid://b5udaxxx55avi" path="res://shop/shop-cant-afford-button.png" id="1_cgytv"]
+[ext_resource type="Script" path="res://shop/shop_item_button.gd" id="1_homcf"]
+
+[sub_resource type="Theme" id="Theme_85kkj"]
+VBoxContainer/constants/separation = 4
+
+[node name="CantAffordItem" type="Control" node_paths=PackedStringArray("caneLabel", "button")]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_homcf")
+caneLabel = NodePath("Panel/HBoxContainer/MarginContainer/Panel/Label")
+button = NodePath("Panel/HBoxContainer/MarginContainer/Panel")
+
+[node name="Panel" type="Panel" parent="."]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_85kkj")
+
+[node name="ColorRect" type="ColorRect" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_vertical = 0
+color = Color(0.203922, 0.109804, 0.152941, 1)
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 1
+text = "Santa's Little Pistol"
+vertical_alignment = 1
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="Panel" type="Panel" parent="Panel/HBoxContainer/MarginContainer"]
+custom_minimum_size = Vector2(160, 0)
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="TextureRect" type="TextureRect" parent="Panel/HBoxContainer/MarginContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_cgytv")
+
+[node name="Label" type="Label" parent="Panel/HBoxContainer/MarginContainer/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -22.5
+offset_top = -11.5
+offset_right = 22.5
+offset_bottom = 11.5
+grow_horizontal = 2
+grow_vertical = 2
+text = "NEED 3 CANES"

@@ -17,5 +17,5 @@ func activate() -> void:
 	var bullet: Bullet = bulletPreset.instantiate();
 	add_child(bullet);
 	bullet.global_position = barrelSocket.global_position;
-	bullet.apply_central_impulse(body.linear_velocity + bulletImpulse);
+	bullet.apply_central_impulse(body.linear_velocity * 2 + bulletImpulse);
 	bullet.rotation = atan2(bulletDir.y, bulletDir.x);

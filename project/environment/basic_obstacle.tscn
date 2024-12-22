@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://k7gnmque02pl"]
+
+[ext_resource type="Script" path="res://environment/basic_obstacle.gd" id="1_6e1bl"]
+[ext_resource type="Texture2D" uid="uid://bmlg1ysft60m6" path="res://environment/snow-obstacle.png" id="2_swhqc"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_83e5w"]
+radius = 153.118
+
+[node name="basic-obstacle" type="CollisionShape2D"]
+z_index = 1
+shape = SubResource("CircleShape2D_83e5w")
+script = ExtResource("1_6e1bl")
+span = 220.0
+spawnHeight = 821.0
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -77.07)
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("2_swhqc")
