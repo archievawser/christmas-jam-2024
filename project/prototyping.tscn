@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://bfvqgu4cskm6t"]
+[gd_scene load_steps=45 format=3 uid="uid://bfvqgu4cskm6t"]
 
 [ext_resource type="Script" path="res://prototyping.gd" id="1_cfq31"]
 [ext_resource type="Texture2D" uid="uid://dmfjbmacaaiv2" path="res://player/santas-hand.png" id="2_k6sdo"]
@@ -17,6 +17,7 @@
 [ext_resource type="Script" path="res://items/pistol/pistol.gd" id="13_t1y00"]
 [ext_resource type="AudioStream" uid="uid://clfltrd5u1ih0" path="res://items/pistol/pistol-1.wav" id="15_fjrmf"]
 [ext_resource type="Texture2D" uid="uid://bw3jp6tqy3xb1" path="res://environment/slope.png" id="16_b5ao5"]
+[ext_resource type="Texture2D" uid="uid://6bfjsil2105y" path="res://ak.png" id="19_0j41v"]
 [ext_resource type="Script" path="res://snowman/cart.gd" id="19_5pdcc"]
 [ext_resource type="Texture2D" uid="uid://cgxm18mjrmvdp" path="res://environment/bg-gradient.png" id="19_7sjut"]
 [ext_resource type="PackedScene" uid="uid://dwx0halwi2f48" path="res://shop/shop_ui.tscn" id="19_l6eky"]
@@ -25,14 +26,24 @@
 [ext_resource type="Texture2D" uid="uid://ot3ihfv5yxrm" path="res://environment/sky-bg.png" id="21_sbev3"]
 [ext_resource type="Theme" uid="uid://b5mysgud7232h" path="res://ui_theme.tres" id="22_mmxdq"]
 [ext_resource type="Texture2D" uid="uid://bylv67cf1w7xr" path="res://snowman/snowman.png" id="24_tah83"]
+[ext_resource type="Texture2D" uid="uid://pldxlteh8tm3" path="res://environment/health-bg.png" id="24_vcy3r"]
+[ext_resource type="Texture2D" uid="uid://c8dh0lljj0evg" path="res://environment/health-color.png" id="25_0chbf"]
+[ext_resource type="AudioStream" uid="uid://78ep762nuawa" path="res://final_stand_phase_1.3.ogg" id="28_c64ru"]
+[ext_resource type="AudioStream" uid="uid://ckrmgalkl4yho" path="res://commbuoy.ogg" id="28_rmtqb"]
+[ext_resource type="Texture2D" uid="uid://d1fbl7wx36vck" path="res://snowman/snowman-base.png" id="29_rhrvt"]
+[ext_resource type="Texture2D" uid="uid://dyw1k08nbdb7u" path="res://more-time.png" id="30_0xrm7"]
+[ext_resource type="AudioStream" uid="uid://dy6ghlndwf2tu" path="res://timer.wav" id="32_d8s0l"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_57qbr"]
 size = Vector2(102, 88.5)
 
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_g8v6w"]
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bta34"]
 size = Vector2(3.91763, 42.4205)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_g8v6w"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hmw2v"]
+size = Vector2(9.70009, 74.3097)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_00kj5"]
 particle_flag_disable_z = true
@@ -70,15 +81,31 @@ scale_max = 0.3
 [sub_resource type="LabelSettings" id="LabelSettings_gs4uh"]
 font_size = 60
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_34vjq"]
-radius = 10.4008
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_21nn6"]
+size = Vector2(1193, 158.5)
 
-[node name="Node2D" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_elbnr"]
+size = Vector2(248, 361.625)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ubx36"]
+radius = 12.5069
+
+[node name="Node2D" type="Node2D" node_paths=PackedStringArray("shop", "player", "snowman", "snowmanLeftBound", "timer", "healthBar", "gameplayTheme", "cam", "timerNotification")]
 script = ExtResource("1_cfq31")
+gunItems = null
+shop = NodePath("CanvasLayer/ShopUi")
+player = NodePath("character/body")
+snowman = NodePath("RigidBody2D")
+snowmanLeftBound = NodePath("RigidBody2D/Node2D")
+timer = NodePath("CanvasLayer/Label")
+healthBar = NodePath("CanvasLayer/Health/Progress")
+gameplayTheme = NodePath("character/body/torso/menu-theme")
+cam = NodePath("character/camera")
+timerNotification = NodePath("timer")
 
 [node name="character" type="Node2D" parent="."]
 texture_filter = 1
-position = Vector2(-1360, 128)
+position = Vector2(-6277, 629)
 
 [node name="head" type="Sprite2D" parent="character"]
 z_index = 1
@@ -133,9 +160,8 @@ root = NodePath("..")
 legLength = 55.0
 legDamper = 40.0
 legStiffness = 1000.0
-currentItem = NodePath("../../pistol")
+currentItem = NodePath("../../rifle")
 passiveFrictionPower = 0.05
-health = null
 
 [node name="torso" type="Sprite2D" parent="character/body"]
 position = Vector2(-3, 32.9997)
@@ -157,6 +183,10 @@ position = Vector2(-6.59, 2.76)
 [node name="arm-right-socket" type="Node2D" parent="character/body/torso"]
 position = Vector2(6.035, 2.76)
 
+[node name="menu-theme" type="AudioStreamPlayer" parent="character/body/torso"]
+stream = ExtResource("28_rmtqb")
+parameters/looping = false
+
 [node name="hitbox" type="CollisionShape2D" parent="character/body"]
 position = Vector2(-3, 38.75)
 shape = SubResource("RectangleShape2D_57qbr")
@@ -168,14 +198,55 @@ enabled = false
 target_position = Vector2(0, 0)
 collision_mask = 0
 script = ExtResource("7_f1w3s")
-body = NodePath("../../../pistol/body")
+body = NodePath("../../../rifle/body")
 stiffness = 3000.0
 damper = 100.0
 centralForce = true
 
 [node name="camera" type="Camera2D" parent="character"]
-offset = Vector2(500, 196.86)
+offset = Vector2(731.23, -100)
 zoom = Vector2(0.51, 0.51)
+
+[node name="pistol" type="Node2D" parent="." node_paths=PackedStringArray("shootStream", "barrelSocket", "sprite", "dominantHandGrip", "body")]
+position = Vector2(-846, 120)
+script = ExtResource("13_t1y00")
+shootStream = NodePath("body/shoot-sound")
+bulletSpeed = 20000.0
+barrelSocket = NodePath("body/sprite/barrel-socket")
+sprite = NodePath("body/sprite")
+dominantHandGrip = NodePath("body/sprite/grip-socket")
+body = NodePath("body")
+facingLeft = true
+
+[node name="body" type="RigidBody2D" parent="pistol"]
+collision_layer = 0
+mass = 5.287
+gravity_scale = 0.753
+linear_damp = 5.0
+
+[node name="shoot-sound" type="AudioStreamPlayer2D" parent="pistol/body"]
+stream = ExtResource("15_fjrmf")
+
+[node name="hitbox" type="CollisionShape2D" parent="pistol/body"]
+position = Vector2(-28, -15)
+scale = Vector2(22.6061, 1.53835)
+shape = SubResource("RectangleShape2D_bta34")
+disabled = true
+
+[node name="sprite" type="Sprite2D" parent="pistol/body"]
+z_index = 2
+texture_filter = 1
+position = Vector2(-29, -15)
+scale = Vector2(8.14478, 8.14478)
+texture = ExtResource("12_f7s3o")
+
+[node name="grip-socket" type="Node2D" parent="pistol/body/sprite"]
+position = Vector2(3.56056, 1.96445)
+scale = Vector2(0.122778, 0.122778)
+
+[node name="barrel-socket" type="Node2D" parent="pistol/body/sprite"]
+position = Vector2(-5.77057, -1.59611)
+scale = Vector2(0.122778, 0.122778)
 
 [node name="npc" type="Node2D" parent="."]
 visible = false
@@ -282,45 +353,49 @@ firstSprite = NodePath("../primary-environment/first-sprite")
 secondCollider = NodePath("../primary-environment/second-collider")
 secondSprite = NodePath("../primary-environment/second-sprite")
 
-[node name="pistol" type="Node2D" parent="." node_paths=PackedStringArray("shootStream", "barrelSocket", "sprite", "dominantHandGrip", "body")]
-position = Vector2(-846, 120)
+[node name="rifle" type="Node2D" parent="." node_paths=PackedStringArray("shootStream", "barrelSocket", "sprite", "weakHandGrip", "dominantHandGrip", "body")]
+position = Vector2(-813, 268)
 script = ExtResource("13_t1y00")
 shootStream = NodePath("body/shoot-sound")
 bulletSpeed = 20000.0
 barrelSocket = NodePath("body/sprite/barrel-socket")
 sprite = NodePath("body/sprite")
+weakHandGrip = NodePath("body/sprite/grip-socket2")
 dominantHandGrip = NodePath("body/sprite/grip-socket")
 body = NodePath("body")
-facingLeft = true
 
-[node name="body" type="RigidBody2D" parent="pistol"]
+[node name="body" type="RigidBody2D" parent="rifle"]
 collision_layer = 0
 mass = 5.287
 gravity_scale = 0.753
 linear_damp = 5.0
 
-[node name="shoot-sound" type="AudioStreamPlayer2D" parent="pistol/body"]
+[node name="shoot-sound" type="AudioStreamPlayer2D" parent="rifle/body"]
 stream = ExtResource("15_fjrmf")
 
-[node name="hitbox" type="CollisionShape2D" parent="pistol/body"]
-position = Vector2(-28, -15)
+[node name="hitbox" type="CollisionShape2D" parent="rifle/body"]
+position = Vector2(-34, 8.8428)
 scale = Vector2(22.6061, 1.53835)
-shape = SubResource("RectangleShape2D_bta34")
+shape = SubResource("RectangleShape2D_hmw2v")
 disabled = true
 
-[node name="sprite" type="Sprite2D" parent="pistol/body"]
+[node name="sprite" type="Sprite2D" parent="rifle/body"]
 z_index = 2
 texture_filter = 1
 position = Vector2(-29, -15)
-scale = Vector2(8.14478, 8.14478)
-texture = ExtResource("12_f7s3o")
+scale = Vector2(6, 6)
+texture = ExtResource("19_0j41v")
 
-[node name="grip-socket" type="Node2D" parent="pistol/body/sprite"]
-position = Vector2(3.56056, 1.96445)
+[node name="grip-socket" type="Node2D" parent="rifle/body/sprite"]
+position = Vector2(-2.33278, 1.84167)
 scale = Vector2(0.122778, 0.122778)
 
-[node name="barrel-socket" type="Node2D" parent="pistol/body/sprite"]
-position = Vector2(-5.77057, -1.59611)
+[node name="grip-socket2" type="Node2D" parent="rifle/body/sprite"]
+position = Vector2(6.38445, 4.54279)
+scale = Vector2(0.122778, 0.122778)
+
+[node name="barrel-socket" type="Node2D" parent="rifle/body/sprite"]
+position = Vector2(12.2778, -0.368334)
 scale = Vector2(0.122778, 0.122778)
 
 [node name="primary-environment" type="RigidBody2D" parent="."]
@@ -333,9 +408,15 @@ position = Vector2(-22, 606)
 scale = Vector2(7.5, 7.5)
 texture = ExtResource("16_b5ao5")
 
+[node name="Sprite2D3" type="Sprite2D" parent="primary-environment/first-sprite"]
+z_index = -4
+position = Vector2(0.93335, -295.2)
+scale = Vector2(528.757, 332.53)
+texture = ExtResource("21_sbev3")
+
 [node name="GPUParticles2D" type="GPUParticles2D" parent="primary-environment/first-sprite"]
 z_index = -2
-position = Vector2(249.067, 178.933)
+position = Vector2(247.333, 105.6)
 scale = Vector2(4.985, 4.985)
 amount = 378
 process_material = SubResource("ParticleProcessMaterial_00kj5")
@@ -354,17 +435,6 @@ position = Vector2(-0.8, 95.8667)
 scale = Vector2(501.338, 133.929)
 texture = ExtResource("20_gbm4u")
 
-[node name="Sprite2D3" type="Sprite2D" parent="primary-environment/first-sprite"]
-position = Vector2(0.933332, -295.2)
-scale = Vector2(528.757, 332.53)
-texture = ExtResource("21_sbev3")
-
-[node name="first-sprite2" type="Sprite2D" parent="primary-environment/first-sprite"]
-texture_filter = 1
-position = Vector2(0, 88.1333)
-texture = ExtResource("16_b5ao5")
-flip_h = true
-
 [node name="first-collider" type="CollisionShape2D" parent="primary-environment"]
 position = Vector2(-20, 886.595)
 scale = Vector2(46.8705, 13.1104)
@@ -376,9 +446,15 @@ position = Vector2(3725, 606)
 scale = Vector2(7.5, 7.5)
 texture = ExtResource("16_b5ao5")
 
+[node name="Sprite2D4" type="Sprite2D" parent="primary-environment/second-sprite"]
+z_index = -6
+position = Vector2(0.933334, -295.2)
+scale = Vector2(528.757, 332.53)
+texture = ExtResource("21_sbev3")
+
 [node name="GPUParticles2D" type="GPUParticles2D" parent="primary-environment/second-sprite"]
 z_index = -2
-position = Vector2(-250.267, 173.733)
+position = Vector2(-252.001, 100.4)
 scale = Vector2(4.985, 4.985)
 amount = 378
 process_material = SubResource("ParticleProcessMaterial_fmni2")
@@ -398,17 +474,6 @@ position = Vector2(-0.533333, 94.5333)
 scale = Vector2(507.066, 136.536)
 texture = ExtResource("20_gbm4u")
 
-[node name="Sprite2D4" type="Sprite2D" parent="primary-environment/second-sprite"]
-position = Vector2(0.933332, -295.2)
-scale = Vector2(528.757, 332.53)
-texture = ExtResource("21_sbev3")
-
-[node name="first-sprite2" type="Sprite2D" parent="primary-environment/second-sprite"]
-texture_filter = 1
-position = Vector2(0.399998, 88.1333)
-texture = ExtResource("16_b5ao5")
-flip_h = true
-
 [node name="second-collider" type="CollisionShape2D" parent="primary-environment"]
 position = Vector2(3725, 887)
 scale = Vector2(46.8705, 13.1104)
@@ -418,14 +483,43 @@ shape = SubResource("RectangleShape2D_bgfbl")
 offset = Vector2(1, 1)
 transform = Transform2D(1, 0, 0, 1, 1, 1)
 
+[node name="Health" type="TextureRect" parent="CanvasLayer"]
+texture_filter = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -203.0
+offset_top = -56.0
+offset_right = 203.19
+offset_bottom = -31.66
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 4
+size_flags_vertical = 8
+texture = ExtResource("24_vcy3r")
+
+[node name="Progress" type="TextureRect" parent="CanvasLayer/Health"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_top = -4.0
+offset_right = 395.0
+offset_bottom = 4.085
+grow_vertical = 2
+texture = ExtResource("25_0chbf")
+
 [node name="Label" type="Label" parent="CanvasLayer"]
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -39.5
-offset_top = 30.0
-offset_right = 39.5
-offset_bottom = 87.0
+offset_left = -39.0
+offset_top = 70.0
+offset_right = 40.0
+offset_bottom = 127.0
 grow_horizontal = 2
 theme = ExtResource("22_mmxdq")
 text = "1:00"
@@ -433,20 +527,129 @@ label_settings = SubResource("LabelSettings_gs4uh")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="Label" type="Label" parent="CanvasLayer/Label"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -93.5
+offset_top = -28.0
+offset_right = 103.5
+offset_bottom = -5.0
+grow_horizontal = 2
+text = "HE'S GETTING AWAY"
+
 [node name="ShopUi" parent="CanvasLayer" instance=ExtResource("19_l6eky")]
+visible = false
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("22_mmxdq")
+
+[node name="TextureRect" type="TextureRect" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -9.0
+offset_top = -10.0
+offset_right = -9.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.01913, 1.03361)
+theme = ExtResource("22_mmxdq")
+texture = ExtResource("20_gbm4u")
+
+[node name="Label" type="Label" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -44.0
+offset_top = -20.0
+offset_right = 36.0
+offset_bottom = 18.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(24.56, 11.81)
+theme_override_font_sizes/font_size = 40
+text = "PLAY"
 
 [node name="RigidBody2D" type="RigidBody2D" parent="."]
-z_index = -1
-position = Vector2(-5047, 1249)
-scale = Vector2(7.5, 7.5)
+z_index = -2
+position = Vector2(-5215, 485)
+collision_layer = 0
+collision_mask = 0
 freeze = true
 freeze_mode = 1
 script = ExtResource("19_5pdcc")
 
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="RigidBody2D"]
+position = Vector2(-242.5, 213.25)
+shape = SubResource("RectangleShape2D_21nn6")
+disabled = true
+
+[node name="Sprite2D5" type="Sprite2D" parent="RigidBody2D"]
+z_index = 1
+texture_filter = 1
+position = Vector2(-481, 86)
+rotation = -0.064077
+scale = Vector2(15.0613, 15.0613)
+texture = ExtResource("11_vm651")
+
 [node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
 texture_filter = 1
+position = Vector2(93, 6)
+scale = Vector2(10.9209, 10.9209)
 texture = ExtResource("24_tah83")
+flip_h = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D/Sprite2D"]
-position = Vector2(33.6, -16.4)
-shape = SubResource("CircleShape2D_34vjq")
+[node name="Sprite2D4" type="Sprite2D" parent="RigidBody2D"]
+z_index = 1
+texture_filter = 1
+position = Vector2(-491, -39)
+scale = Vector2(15.0613, 15.0613)
+texture = ExtResource("7_avqii")
+
+[node name="Sprite2D6" type="Sprite2D" parent="RigidBody2D"]
+texture_filter = 1
+position = Vector2(-473, 160)
+scale = Vector2(18.019, 18.019)
+texture = ExtResource("29_rhrvt")
+
+[node name="RigidBody2D" type="RigidBody2D" parent="RigidBody2D"]
+collision_layer = 4
+collision_mask = 4
+freeze = true
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="RigidBody2D/RigidBody2D"]
+position = Vector2(-470, 73)
+shape = SubResource("RectangleShape2D_elbnr")
+
+[node name="Node2D" type="Node2D" parent="RigidBody2D"]
+position = Vector2(-839, 136)
+
+[node name="play-theme" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("28_c64ru")
+
+[node name="timer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("32_d8s0l")
+
+[node name="GunUpgrade" type="CollisionShape2D" parent="."]
+position = Vector2(-4952, 170.5)
+scale = Vector2(6, 6)
+shape = SubResource("CircleShape2D_ubx36")
+
+[node name="Sprite2D" type="Sprite2D" parent="GunUpgrade"]
+texture_filter = 1
+position = Vector2(-0.166626, -0.75)
+texture = ExtResource("30_0xrm7")

@@ -6,15 +6,14 @@ extends RigidBody2D
 
 
 func _ready() -> void:
-	print("created");
 	connect("body_entered", _on_body_entered);
 
 
 func _on_body_entered(body: Node):
-	var npc := body as NPC;
+	print("hi");
+	var e := body.owner as GameManager;
+	print(body.owner);
 
-	if npc:
-		print("hit ", npc)
-		npc.take_damage(damage);
+	e.damage_boss(damage);
 
 	queue_free();

@@ -54,7 +54,7 @@ func _process(delta: float) -> void:
 	_update_head_rotation();
 	_apply_passive_friction();
 
-	if currentItem:
+	if owner.playing && currentItem:
 		if Input.is_action_just_pressed("activate"):
 			currentItem.activate();
 		if currentItem && Input.is_action_just_pressed("activate"):
@@ -75,6 +75,8 @@ func _physics_process(delta: float) -> void:
 			_prime_jump();
 		elif Input.is_action_just_released("jump"):
 			_jump();
+
+
 
 
 func _equip(item: Equipable) -> void:
@@ -113,6 +115,8 @@ func _jump() -> void:
 	
 func _integrate_forces(_state: PhysicsDirectBodyState2D) -> void:
 	rotation = clamp(rotation, -0.1, 0.1);
+
+	owner.check_end_game();
 
 
 func _build_legs() -> void:

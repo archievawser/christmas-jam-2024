@@ -17,6 +17,7 @@ grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("1_nrpa6")
+text = "PURCHASE"
 caneLabel = NodePath("Panel/HBoxContainer/MarginContainer/Panel/Label")
 button = NodePath("Panel/HBoxContainer/MarginContainer/Panel")
 requiredCanes = 1
@@ -39,7 +40,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 size_flags_vertical = 0
-color = Color(0.0823529, 0.113725, 0.156863, 1)
+color = Color(0.141176, 0.0823529, 0.152941, 1)
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Panel"]
 layout_mode = 1

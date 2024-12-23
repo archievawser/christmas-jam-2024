@@ -22,7 +22,7 @@ shadow_size = 0
 shadow_color = Color(0, 0, 0, 1)
 shadow_offset = Vector2(0, 0)
 
-[node name="ShopUi" type="Control"]
+[node name="ShopUi" type="Control" node_paths=PackedStringArray("tryAgainBtn")]
 texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
@@ -36,15 +36,16 @@ ownedItems = null
 equippedItem = null
 equipables = null
 caneCount = null
+tryAgainBtn = NodePath("TextureRect/MarginContainer/VBoxContainer/MarginContainer2/TryAgain")
 
 [node name="TextureRect2" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -60.0
+offset_left = -61.0
 offset_top = -40.0
-offset_right = -60.0
+offset_right = -61.0
 offset_bottom = -40.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -53,6 +54,7 @@ texture = ExtResource("2_i7jnm")
 stretch_mode = 6
 
 [node name="TextureRect" type="TextureRect" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -91,7 +93,7 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 size_flags_vertical = 1
 theme_override_font_sizes/font_size = 35
-text = "SANTA GOT HIS GUN"
+text = "THE CANDY SHOP"
 label_settings = SubResource("LabelSettings_b4rjy")
 horizontal_alignment = 1
 
@@ -105,19 +107,19 @@ size_flags_vertical = 10
 theme_override_constants/margin_right = 5
 theme_override_constants/margin_bottom = 10
 
-[node name="TextureRect" type="TextureRect" parent="TextureRect/MarginContainer/VBoxContainer/MarginContainer2"]
+[node name="TryAgain" type="TextureRect" parent="TextureRect/MarginContainer/VBoxContainer/MarginContainer2"]
 custom_minimum_size = Vector2(0, 31.89)
 layout_mode = 2
 texture = ExtResource("8_d4pk2")
 
-[node name="Label" type="Label" parent="TextureRect/MarginContainer/VBoxContainer/MarginContainer2/TextureRect"]
+[node name="Label" type="Label" parent="TextureRect/MarginContainer/VBoxContainer/MarginContainer2/TryAgain"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-text = "RETRY"
+text = "TRY AGAIN"
 horizontal_alignment = 1
 vertical_alignment = 1
 

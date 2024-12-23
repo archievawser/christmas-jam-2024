@@ -10,7 +10,7 @@ particle_flag_disable_z = true
 gravity = Vector3(0, 98, 0)
 
 [node name="Bullet" type="RigidBody2D" node_paths=PackedStringArray("sprite")]
-collision_layer = 0
+collision_layer = 4
 collision_mask = 4
 custom_integrator = true
 continuous_cd = 1
