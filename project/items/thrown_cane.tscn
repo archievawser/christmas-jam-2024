@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://ccfbcw3esri3m"]
+
+[ext_resource type="Script" path="res://thrown_cane.gd" id="1_imoew"]
+[ext_resource type="Texture2D" uid="uid://b2giqkaltl4jj" path="res://items/cane-icon.png" id="2_n38fk"]
+[ext_resource type="Texture2D" uid="uid://bvxg4vm0jsslk" path="res://items/cane-icon-interactable.png" id="3_262a7"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_tdfkg"]
+radius = 54.0
+
+[node name="ThrownCane" type="RigidBody2D" node_paths=PackedStringArray("normalSprite", "interactableSprite")]
+collision_layer = 0
+collision_mask = 2
+gravity_scale = 0.0
+can_sleep = false
+lock_rotation = true
+freeze_mode = 1
+continuous_cd = 1
+contact_monitor = true
+max_contacts_reported = 2
+script = ExtResource("1_imoew")
+normalSprite = NodePath("Sprite2D")
+interactableSprite = NodePath("Sprite2D2")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = 4
+texture_filter = 1
+position = Vector2(-3, 10)
+rotation = -2.33274
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("2_n38fk")
+
+[node name="Sprite2D2" type="Sprite2D" parent="."]
+visible = false
+z_index = 4
+texture_filter = 1
+position = Vector2(-3, 10)
+rotation = -2.33274
+scale = Vector2(7.5, 7.5)
+texture = ExtResource("3_262a7")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 16)
+shape = SubResource("CircleShape2D_tdfkg")

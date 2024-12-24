@@ -70,13 +70,15 @@ func _physics_process(delta: float) -> void:
 	if currentItem:
 		currentItem.aim_at(camera.get_global_mouse_position());
 
-	if _can_jump():
-		if Input.is_action_pressed("jump"):
-			_prime_jump();
-		elif Input.is_action_just_released("jump"):
+	if Input.is_action_pressed("jump"):
+		_prime_jump();
+	elif Input.is_action_just_released("jump"):
+		if _can_jump():
 			_jump();
-
-
+		else:
+			for legName in legNames:
+				var physicalLeg: Spring2D = legSprings[legName];
+				physicalLeg.stiffness = legStiffness;
 
 
 func _equip(item: Equipable) -> void:
@@ -96,7 +98,13 @@ func _apply_passive_friction() -> void:
 
 
 func _can_jump() -> bool:
-	return true;
+	for legName in legNames:
+		var physicalLeg: Spring2D = legSprings[legName];
+		
+		if physicalLeg.is_colliding():
+			return true;
+
+	return false;
 
 
 func _prime_jump() -> void:

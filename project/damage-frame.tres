@@ -1,0 +1,7 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://dygf548dpe5g7"]
+
+[ext_resource type="Shader" path="res://prototyping.gdshader" id="1_dvrkq"]
+
+[resource]
+shader = ExtResource("1_dvrkq")
+shader_parameter/damage_frame = false

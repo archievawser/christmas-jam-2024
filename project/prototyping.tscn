@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bfvqgu4cskm6t"]
+[gd_scene load_steps=50 format=3 uid="uid://bfvqgu4cskm6t"]
 
 [ext_resource type="Script" path="res://prototyping.gd" id="1_cfq31"]
 [ext_resource type="Texture2D" uid="uid://dmfjbmacaaiv2" path="res://player/santas-hand.png" id="2_k6sdo"]
@@ -28,10 +28,15 @@
 [ext_resource type="Texture2D" uid="uid://bylv67cf1w7xr" path="res://snowman/snowman.png" id="24_tah83"]
 [ext_resource type="Texture2D" uid="uid://pldxlteh8tm3" path="res://environment/health-bg.png" id="24_vcy3r"]
 [ext_resource type="Texture2D" uid="uid://c8dh0lljj0evg" path="res://environment/health-color.png" id="25_0chbf"]
+[ext_resource type="Shader" path="res://prototyping.gdshader" id="28_6pa81"]
 [ext_resource type="AudioStream" uid="uid://78ep762nuawa" path="res://final_stand_phase_1.3.ogg" id="28_c64ru"]
 [ext_resource type="AudioStream" uid="uid://ckrmgalkl4yho" path="res://commbuoy.ogg" id="28_rmtqb"]
+[ext_resource type="Script" path="res://intro.gd" id="28_w1hx3"]
+[ext_resource type="AudioStream" uid="uid://qvyx4ipk76l" path="res://type.wav" id="29_3osxr"]
 [ext_resource type="Texture2D" uid="uid://d1fbl7wx36vck" path="res://snowman/snowman-base.png" id="29_rhrvt"]
-[ext_resource type="Texture2D" uid="uid://dyw1k08nbdb7u" path="res://more-time.png" id="30_0xrm7"]
+[ext_resource type="Material" uid="uid://dygf548dpe5g7" path="res://damage-frame.tres" id="30_06j3a"]
+[ext_resource type="Script" path="res://failed.gd" id="30_easdw"]
+[ext_resource type="Script" path="res://victory.gd" id="30_sp7w6"]
 [ext_resource type="AudioStream" uid="uid://dy6ghlndwf2tu" path="res://timer.wav" id="32_d8s0l"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_57qbr"]
@@ -43,7 +48,7 @@ size = Vector2(3.91763, 42.4205)
 [sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_g8v6w"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_hmw2v"]
-size = Vector2(9.70009, 74.3097)
+size = Vector2(7.0335, 50.7037)
 
 [sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_00kj5"]
 particle_flag_disable_z = true
@@ -81,31 +86,33 @@ scale_max = 0.3
 [sub_resource type="LabelSettings" id="LabelSettings_gs4uh"]
 font_size = 60
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_21nn6"]
-size = Vector2(1193, 158.5)
+[sub_resource type="LabelSettings" id="LabelSettings_mdfon"]
+font_size = 19
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_wdwb8"]
+shader = ExtResource("28_6pa81")
+shader_parameter/damage_frame = false
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_elbnr"]
 size = Vector2(248, 361.625)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_ubx36"]
-radius = 12.5069
-
-[node name="Node2D" type="Node2D" node_paths=PackedStringArray("shop", "player", "snowman", "snowmanLeftBound", "timer", "healthBar", "gameplayTheme", "cam", "timerNotification")]
+[node name="Game" type="Node2D" node_paths=PackedStringArray("shop", "player", "snowman", "snowmanLeftBound", "timer", "healthBar", "gameplayTheme", "cam", "timerNotification", "failed", "victory")]
 script = ExtResource("1_cfq31")
-gunItems = null
 shop = NodePath("CanvasLayer/ShopUi")
 player = NodePath("character/body")
-snowman = NodePath("RigidBody2D")
-snowmanLeftBound = NodePath("RigidBody2D/Node2D")
+snowman = NodePath("Snowman")
+snowmanLeftBound = NodePath("Snowman/Node2D")
 timer = NodePath("CanvasLayer/Label")
 healthBar = NodePath("CanvasLayer/Health/Progress")
 gameplayTheme = NodePath("character/body/torso/menu-theme")
 cam = NodePath("character/camera")
 timerNotification = NodePath("timer")
+failed = NodePath("CanvasLayer/Failed")
+victory = NodePath("CanvasLayer/Victory")
 
 [node name="character" type="Node2D" parent="."]
 texture_filter = 1
-position = Vector2(-6277, 629)
+position = Vector2(-2622, 595)
 
 [node name="head" type="Sprite2D" parent="character"]
 z_index = 1
@@ -208,7 +215,8 @@ offset = Vector2(731.23, -100)
 zoom = Vector2(0.51, 0.51)
 
 [node name="pistol" type="Node2D" parent="." node_paths=PackedStringArray("shootStream", "barrelSocket", "sprite", "dominantHandGrip", "body")]
-position = Vector2(-846, 120)
+visible = false
+position = Vector2(-7723, 206)
 script = ExtResource("13_t1y00")
 shootStream = NodePath("body/shoot-sound")
 bulletSpeed = 20000.0
@@ -354,7 +362,7 @@ secondCollider = NodePath("../primary-environment/second-collider")
 secondSprite = NodePath("../primary-environment/second-sprite")
 
 [node name="rifle" type="Node2D" parent="." node_paths=PackedStringArray("shootStream", "barrelSocket", "sprite", "weakHandGrip", "dominantHandGrip", "body")]
-position = Vector2(-813, 268)
+position = Vector2(-7785, 286)
 script = ExtResource("13_t1y00")
 shootStream = NodePath("body/shoot-sound")
 bulletSpeed = 20000.0
@@ -366,6 +374,7 @@ body = NodePath("body")
 
 [node name="body" type="RigidBody2D" parent="rifle"]
 collision_layer = 0
+collision_mask = 0
 mass = 5.287
 gravity_scale = 0.753
 linear_damp = 5.0
@@ -374,7 +383,7 @@ linear_damp = 5.0
 stream = ExtResource("15_fjrmf")
 
 [node name="hitbox" type="CollisionShape2D" parent="rifle/body"]
-position = Vector2(-34, 8.8428)
+position = Vector2(-26.5, 4)
 scale = Vector2(22.6061, 1.53835)
 shape = SubResource("RectangleShape2D_hmw2v")
 disabled = true
@@ -431,8 +440,8 @@ texture = ExtResource("19_7sjut")
 
 [node name="Sprite2D2" type="Sprite2D" parent="primary-environment/first-sprite"]
 z_index = -1
-position = Vector2(-0.8, 95.8667)
-scale = Vector2(501.338, 133.929)
+position = Vector2(-0.8, 270.251)
+scale = Vector2(501.338, 482.698)
 texture = ExtResource("20_gbm4u")
 
 [node name="first-collider" type="CollisionShape2D" parent="primary-environment"]
@@ -470,8 +479,8 @@ texture = ExtResource("19_7sjut")
 
 [node name="Sprite2D3" type="Sprite2D" parent="primary-environment/second-sprite"]
 z_index = -1
-position = Vector2(-0.533333, 94.5333)
-scale = Vector2(507.066, 136.536)
+position = Vector2(-0.533333, 268.333)
+scale = Vector2(507.066, 484.135)
 texture = ExtResource("20_gbm4u")
 
 [node name="second-collider" type="CollisionShape2D" parent="primary-environment"]
@@ -584,72 +593,206 @@ pivot_offset = Vector2(24.56, 11.81)
 theme_override_font_sizes/font_size = 40
 text = "PLAY"
 
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
+[node name="Intro" type="TextureRect" parent="CanvasLayer" node_paths=PackedStringArray("typeSfx")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -10.0
+offset_right = -8.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.01823, 1.03045)
+theme = ExtResource("22_mmxdq")
+texture = ExtResource("20_gbm4u")
+script = ExtResource("28_w1hx3")
+labels = [NodePath("VBoxContainer/Label"), NodePath("VBoxContainer/Label"), NodePath("VBoxContainer/Label"), NodePath("VBoxContainer/Label"), NodePath("VBoxContainer/Label")]
+texts = ["A SNOWMAN IS STEALING SANTA'S PRESENTS", "DON'T LET HIM GET AWAY.", "LEFT CLICK TO SHOOT.", "RIGHT CLICK TO DEFLECT HIS CANES.", "READY TO PLAY?"]
+typeSfx = NodePath("AudioStreamPlayer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Intro"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Intro/VBoxContainer"]
+layout_mode = 2
+text = "..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/Intro/VBoxContainer"]
+layout_mode = 2
+text = "(press enter to continue)"
+label_settings = SubResource("LabelSettings_mdfon")
+horizontal_alignment = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="CanvasLayer/Intro"]
+stream = ExtResource("29_3osxr")
+volume_db = -12.693
+pitch_scale = 0.74
+
+[node name="Failed" type="TextureRect" parent="CanvasLayer" node_paths=PackedStringArray("typeSfx")]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -14.0
+offset_top = -10.0
+offset_right = -14.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.01823, 1.03045)
+theme = ExtResource("22_mmxdq")
+texture = ExtResource("20_gbm4u")
+script = ExtResource("30_easdw")
+labels = [NodePath("VBoxContainer/Label")]
+texts = ["YOU FAILED."]
+typeSfx = NodePath("AudioStreamPlayer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Failed"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Failed/VBoxContainer"]
+layout_mode = 2
+text = "..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/Failed/VBoxContainer"]
+layout_mode = 2
+text = "(press enter to retry)"
+label_settings = SubResource("LabelSettings_mdfon")
+horizontal_alignment = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="CanvasLayer/Failed"]
+stream = ExtResource("29_3osxr")
+volume_db = -12.693
+pitch_scale = 0.74
+
+[node name="Victory" type="TextureRect" parent="CanvasLayer" node_paths=PackedStringArray("otherLabel", "typeSfx")]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -8.0
+offset_top = -10.0
+offset_right = -8.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1.01823, 1.03045)
+theme = ExtResource("22_mmxdq")
+texture = ExtResource("20_gbm4u")
+script = ExtResource("30_sp7w6")
+otherLabel = NodePath("VBoxContainer/Label2")
+labels = [NodePath("VBoxContainer/Label"), NodePath("VBoxContainer/Label"), NodePath("VBoxContainer/Label")]
+texts = ["YOU SUCCEEDED", "CHRISTMAS IS SAVED", "THANKS FOR PLAYING <3"]
+typeSfx = NodePath("AudioStreamPlayer")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Victory"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Victory/VBoxContainer"]
+layout_mode = 2
+text = "..."
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label2" type="Label" parent="CanvasLayer/Victory/VBoxContainer"]
+layout_mode = 2
+text = "(press enter to continue)"
+label_settings = SubResource("LabelSettings_mdfon")
+horizontal_alignment = 1
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="CanvasLayer/Victory"]
+stream = ExtResource("29_3osxr")
+volume_db = -12.693
+pitch_scale = 0.74
+
+[node name="Snowman" type="RigidBody2D" parent="." node_paths=PackedStringArray("head", "plr", "armSocket")]
 z_index = -2
-position = Vector2(-5215, 485)
-collision_layer = 0
+material = SubResource("ShaderMaterial_wdwb8")
+position = Vector2(-6052, 486)
+collision_layer = 4
 collision_mask = 0
+can_sleep = false
+lock_rotation = true
 freeze = true
 freeze_mode = 1
+custom_integrator = true
 script = ExtResource("19_5pdcc")
+head = NodePath("head")
+plr = NodePath("../character/body")
+armSocket = NodePath("Node2D2")
 
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="RigidBody2D"]
-position = Vector2(-242.5, 213.25)
-shape = SubResource("RectangleShape2D_21nn6")
-disabled = true
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="Snowman"]
+position = Vector2(-476, 58)
+shape = SubResource("RectangleShape2D_elbnr")
 
-[node name="Sprite2D5" type="Sprite2D" parent="RigidBody2D"]
+[node name="Sprite2D5" type="Sprite2D" parent="Snowman"]
 z_index = 1
 texture_filter = 1
+material = ExtResource("30_06j3a")
 position = Vector2(-481, 86)
 rotation = -0.064077
 scale = Vector2(15.0613, 15.0613)
 texture = ExtResource("11_vm651")
 
-[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
+[node name="Sprite2D" type="Sprite2D" parent="Snowman"]
 texture_filter = 1
 position = Vector2(93, 6)
 scale = Vector2(10.9209, 10.9209)
 texture = ExtResource("24_tah83")
 flip_h = true
 
-[node name="Sprite2D4" type="Sprite2D" parent="RigidBody2D"]
+[node name="head" type="Sprite2D" parent="Snowman"]
 z_index = 1
 texture_filter = 1
-position = Vector2(-491, -39)
+material = ExtResource("30_06j3a")
+position = Vector2(-487, 9)
+rotation = -0.134169
 scale = Vector2(15.0613, 15.0613)
 texture = ExtResource("7_avqii")
+offset = Vector2(0, -3.845)
 
-[node name="Sprite2D6" type="Sprite2D" parent="RigidBody2D"]
+[node name="Sprite2D6" type="Sprite2D" parent="Snowman"]
 texture_filter = 1
+material = ExtResource("30_06j3a")
 position = Vector2(-473, 160)
 scale = Vector2(18.019, 18.019)
 texture = ExtResource("29_rhrvt")
 
-[node name="RigidBody2D" type="RigidBody2D" parent="RigidBody2D"]
-collision_layer = 4
-collision_mask = 4
-freeze = true
+[node name="Node2D" type="Node2D" parent="Snowman"]
+position = Vector2(-844, 232)
 
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="RigidBody2D/RigidBody2D"]
-position = Vector2(-470, 73)
-shape = SubResource("RectangleShape2D_elbnr")
-
-[node name="Node2D" type="Node2D" parent="RigidBody2D"]
-position = Vector2(-839, 136)
+[node name="Node2D2" type="Node2D" parent="Snowman"]
+position = Vector2(-429, 70)
 
 [node name="play-theme" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("28_c64ru")
 
 [node name="timer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("32_d8s0l")
-
-[node name="GunUpgrade" type="CollisionShape2D" parent="."]
-position = Vector2(-4952, 170.5)
-scale = Vector2(6, 6)
-shape = SubResource("CircleShape2D_ubx36")
-
-[node name="Sprite2D" type="Sprite2D" parent="GunUpgrade"]
-texture_filter = 1
-position = Vector2(-0.166626, -0.75)
-texture = ExtResource("30_0xrm7")
+volume_db = -6.66
